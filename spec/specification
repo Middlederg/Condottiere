@@ -1,0 +1,22 @@
+# Especificación
+
+## Objetivo
+
+El objetivo es conquistar 3 ciudades adyacentes (para 4 o más jugadores)
+Para 2 o 3 jugadores, el objetivo son 4 ciudades adyacentes.
+
+Si todas las regiones tienen dueño y ningún jugador ha alcanzado el objetivo, el jugador que tenga más regiones gana la partida.
+
+## Desarrollo
+
+El reparto consiste en que cada jugador recibe 10 cartas, más una carta por cada región que controle.
+
+El condottiere elige la región por la que se luchará.
+
+Se realiza la batalla. Si un jugador tiene fuerza mayor a 0, y tiene más que el resto de jugadores, gana la región.
+Si alguien juega el obispo, nadie gana la región.
+
+
+## La batalla
+
+Cada jugador puede decidir poner una carta o pasar. Si un jugador pasa no  podrá poner más cartas.
