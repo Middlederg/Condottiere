@@ -1,0 +1,2 @@
+# Condottiere
+Condottiere cardgame
