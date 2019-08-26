@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.28307.757
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Condottiere.Core", "src\Condottiere.Core\Condottiere.Core.csproj", "{CE463F5E-72B4-4B99-92DC-656570D2B8FB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Condottiere.Test", "test\Condottiere.Test\Condottiere.Test.csproj", "{018987CA-F1B9-4E60-BDFD-238A953B9932}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{CE463F5E-72B4-4B99-92DC-656570D2B8FB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CE463F5E-72B4-4B99-92DC-656570D2B8FB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CE463F5E-72B4-4B99-92DC-656570D2B8FB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CE463F5E-72B4-4B99-92DC-656570D2B8FB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{018987CA-F1B9-4E60-BDFD-238A953B9932}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{018987CA-F1B9-4E60-BDFD-238A953B9932}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{018987CA-F1B9-4E60-BDFD-238A953B9932}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{018987CA-F1B9-4E60-BDFD-238A953B9932}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {72860B43-24A9-47DA-9376-9B524C1DC16B}
+	EndGlobalSection
+EndGlobal
