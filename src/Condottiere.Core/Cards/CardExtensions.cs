@@ -12,4 +12,9 @@ public static class CardExtensions
     {
         return cards.Any(x => x is T);
     }
+
+    public static int CountOf<T>(this IEnumerable<Card> cards) where T : Card
+    {
+        return cards.Count(x => x is T);
+    }
 }

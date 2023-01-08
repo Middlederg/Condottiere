@@ -1,0 +1,36 @@
+﻿@page "/"
+
+<PageTitle>Condottiere</PageTitle>
+
+@if (turn is not null)
+{
+    @foreach (var player in turn.Players)
+    {
+        <div class="flex justify-between items-center">
+            <span>
+                @player.Name
+            </span>
+            <span>
+                @player.Points(gameContext)
+            </span>
+        </div>
+    }
+}
+
+@code {
+
+    private GameContext gameContext = new GameContext(4, new SpringOptions(), new BishopOptions());
+    private TurnContext turn;
+    private Deck deck;
+
+    protected override void OnInitialized()
+    {
+        var playerNames = NameCreator.Create(gameContext.PlayerCount);
+        Color[] colors = Enum.GetValues<Color>();
+        var players = playerNames.Select((name, index) => new Player(index, name, colors.ElementAt(index), Difficulty.Normal)).ToList();
+
+        turn = new TurnContext(players);
+        deck = new Deck(gameContext);
+        turn.PrepareNextBattle(deck, 1);
+    }
+}

@@ -1,0 +1,70 @@
+﻿<header class="w-full text-white bg-@Styles.MainColor-700 flex justify-center">
+    <div class="w-full max-w-3xl flex flex-col">
+        <div class="flex flex-row items-center justify-between py-2 md:py-3 px-4 md:px-8">
+            <div class="flex flex-row items-center justify-between">
+                <NavLink class="text-lg font-semibold tracking-widest text-white hover:text-@Styles.MainColor-100 uppercase rounded-lg focus:outline-none focus:shadow-outline"
+                         href="" Match="NavLinkMatch.All">
+                    Home
+                </NavLink>
+            </div>
+            <div class="sm:hidden flex items-center">
+                <button class="p-1 border-2 rounded" @onclick="ToggleMenu">
+                    <MenuIcon />
+                </button>
+            </div>
+            <nav class="hidden sm:flex justify-end items-center flex-row">
+                <NavLink class="flex px-4 py-2 text-sm font-semibold rounded-lg outline-none focus:outline-none"
+                         href="prepareGame" ActiveClass=@activeClass>
+
+                    <HomeIcon />
+                    <span>
+                        Home
+                    </span>
+
+                </NavLink>
+
+                <NavLink class="flex px-4 py-2 text-sm font-semibold rounded-lg outline-none focus:outline-none"
+                         href="missions" ActiveClass=@activeClass>
+
+                    <MapIcon />
+                    <span>
+                        Map
+                    </span>
+                </NavLink>
+            </nav>
+        </div>
+        <div class="@(showMenu ? "" : "hidden")">
+            <nav class="flex sm:hidden flex-col space-y-2 justify-end items-center flex-row mx-auto py-2">
+                <NavLink class="flex items-center justify-center space-x-2 max-w-xs w-full px-4 py-2 text-sm uppercase font-semibold rounded-lg outline-none focus:outline-none"
+                         href="prepareGame" ActiveClass=@activeClass>
+
+                    <HomeIcon />
+                    <span>
+                        Home
+                    </span>
+
+                </NavLink>
+
+                <NavLink class="flex items-center justify-center space-x-2 max-w-xs w-full px-4 py-2 text-sm uppercase font-semibold rounded-lg outline-none focus:outline-none"
+                         href="missions" ActiveClass=@activeClass>
+
+                    <MapIcon />
+                    <span>
+                        Map
+                    </span>
+
+                </NavLink>
+            </nav>
+        </div>
+    </div>
+</header>
+
+@code {
+    private string activeClass = $"text-{Styles.MainColor}-900 bg-white hover:bg-{Styles.MainColor}-50";
+    private bool showMenu = false;
+
+    private void ToggleMenu()
+    {
+        showMenu = !showMenu;
+    }
+}

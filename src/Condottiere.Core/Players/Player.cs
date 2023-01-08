@@ -20,12 +20,12 @@ public class Player : Entity<int>
 
     public Status? status;
 
-    public Player(int id, string name, List<Card> hand, Color color, Difficulty profile) : base(id)
+    public Player(int id, string name, Color color, Difficulty profile) : base(id)
     {
         Name = name;
         Color = color;
         Profile = profile;
-        Hand = hand.ToList();
+        Hand = new List<Card>();
         Army = new List<Card>();
         OwnedProvinces = new List<Province>();
     }
@@ -34,6 +34,7 @@ public class Player : Entity<int>
     {
         Hand = newCards.ToList();
         status = new Status(isDefending);
+        Army = new List<Card>();
     }
 
     public bool CanPlayMoreCards

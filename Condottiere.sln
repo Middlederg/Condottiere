@@ -18,6 +18,12 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Elementos de la solución",
 		spec\specification = spec\specification
 	EndProjectSection
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{827B08F2-8C23-4A3E-8BB1-052E6B22DFE4}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{1339FD06-227A-4EFF-9938-E8A77C7B860A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Condottiere.Web", "src\Condottiere.Web\Condottiere.Web.csproj", "{A7238B75-B5D9-4179-A9E2-478E70865B45}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -32,9 +38,18 @@ Global
 		{018987CA-F1B9-4E60-BDFD-238A953B9932}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{018987CA-F1B9-4E60-BDFD-238A953B9932}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{018987CA-F1B9-4E60-BDFD-238A953B9932}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A7238B75-B5D9-4179-A9E2-478E70865B45}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A7238B75-B5D9-4179-A9E2-478E70865B45}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A7238B75-B5D9-4179-A9E2-478E70865B45}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A7238B75-B5D9-4179-A9E2-478E70865B45}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{CE463F5E-72B4-4B99-92DC-656570D2B8FB} = {827B08F2-8C23-4A3E-8BB1-052E6B22DFE4}
+		{018987CA-F1B9-4E60-BDFD-238A953B9932} = {1339FD06-227A-4EFF-9938-E8A77C7B860A}
+		{A7238B75-B5D9-4179-A9E2-478E70865B45} = {827B08F2-8C23-4A3E-8BB1-052E6B22DFE4}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {72860B43-24A9-47DA-9376-9B524C1DC16B}

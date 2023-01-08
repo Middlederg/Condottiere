@@ -10,13 +10,26 @@ public record BishopOptions(bool UseOldEditionRules = false)
     public int TotalCards() => UseOldEditionRules ? 3 : 6;
 }
 
+public record VictoryOptions(int Provinces, int NearProvinces);
+
 public class GameContext
 {
+    public int PlayerCount { get; }
     public SpringOptions SpringOptions { get; }
     public BishopOptions BishopOptions { get; }
 
-    public GameContext(SpringOptions springOptions, BishopOptions bishopOptions)
+    public Dictionary<int, VictoryOptions> VictoryOptions = new()
     {
+        {2, new VictoryOptions(6, 4)},
+        {3, new VictoryOptions(6, 4)},
+        {4, new VictoryOptions(5, 3)},
+        {5, new VictoryOptions(5, 3)},
+        {6, new VictoryOptions(5, 3)},
+    };
+
+    public GameContext(int totalPlayers, SpringOptions springOptions, BishopOptions bishopOptions)
+    {
+        PlayerCount = totalPlayers;
         SpringOptions = springOptions;
         BishopOptions = bishopOptions;
         CurrentSeason = Season.None;
@@ -28,7 +41,7 @@ public class GameContext
         playedMercenaries = new List<Mercenary>();
         CurrentSeason = Season.None;
     }
-    
+
     public Season CurrentSeason { get; private set; }
     public bool IsWinter() => CurrentSeason == Season.Winter;
 
@@ -54,4 +67,9 @@ public class GameContext
             playedMercenaries.Remove(witdrawedMercenary);
         }
     }
+
+    public int GetProvincesTarget => VictoryOptions[PlayerCount].Provinces;
+    public int GetNearProvincesTarget => VictoryOptions[PlayerCount].NearProvinces;
 }
+       
+    

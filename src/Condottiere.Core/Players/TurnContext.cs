@@ -30,7 +30,7 @@ public class TurnContext
         Index++;
     }
 
-    public IEnumerable<PlayerSummary> GetRanking(GameContext gameContext)
+    public IEnumerable<PlayerSummary> GetBattleRanking(GameContext gameContext)
     {
         return Players
             .Select(x => x.ToSummary(gameContext))
@@ -38,9 +38,9 @@ public class TurnContext
             .ToList();
     }
 
-    public PlayerSummary? Winner(GameContext gameContext)
+    public PlayerSummary? BattleWinner(GameContext gameContext)
     {
-        IEnumerable<PlayerSummary> allPlayers = GetRanking(gameContext);
+        IEnumerable<PlayerSummary> allPlayers = GetBattleRanking(gameContext);
         int maxPoints = allPlayers.Max(x => x.Points);
         IEnumerable<PlayerSummary> playersWithMaxPoints = allPlayers.Where(x => x.Points == maxPoints);
         return playersWithMaxPoints.Count() == 1 ? playersWithMaxPoints.First() : null;
@@ -70,59 +70,52 @@ public class TurnContext
     }
 
 
-    public bool IsTie(GameContext context) => IsEndOfBattle() && Winner(context) is null;
+    public bool IsTie(GameContext context) => IsEndOfBattle() && BattleWinner(context) is null;
 
-
-    /// <summary>
-    /// Devuelve el jugador al que pasará la ficha de condottiere al finalizar una batalla
-    /// </summary>
-    /// <returns></returns>
-    public Player SiguienteCondottiere()
+    public Player NextBattleChooser(GameContext gameContext)
     {
-        //Unico jugador con mayor número de cortesanas
-        int max = Players.Max(x => x.NumCortesanasJugadas());
-        var potenciales = Players.Where(x => x.NumCortesanasJugadas() == max);
-        if (potenciales.Count() == 1)
-            return potenciales.First();
+        int maximumCourtisan = Players.Max(x => x.Army.CountOf<Courtisan>());
+        IEnumerable<Player> potentials = Players.Where(x => x.Army.CountOf<Courtisan>() == maximumCourtisan);
+        if (potentials.Count() == 1)
+        {
+            return potentials.First();
+        }
 
-        //Jugador con más puntos
-        if (!Tie())
-            return GanadorBatalla().First();
+        if (!IsTie(gameContext))
+        {
+            return Players.First(x => x.Id == BattleWinner(gameContext)!.Id);
+        }
 
-        //Siguiente jugador a la izquierda
-        return JugadorCondottiere == Players.Count - 1 ? Players[0] : Players[JugadorCondottiere + 1];
+        return Players[NextPlayerIndex];
     }
 
-    /// <summary>
-    /// 4, 5, 6 jugadores -> 5 regiones o 3 adyacentes
-    /// 2, 3 jugadores -> 6 regiones o 4 adyacentes
-    /// </summary>
-    /// <returns></returns>
-    public Player HayGanadorPartida()
+
+    public IEnumerable<Player> GetAllWinners(GameContext gameContext)
     {
-        //Busca si hay algún jugador que haya obtenido el número objetivo de provincias
-        int objetivo = Players.Count > 3 ? 5 : 6;
-        foreach (Player jug in Players)
-            if (jug.OwnedProvinces.Count >= objetivo)
-                return jug;
+        return SearchForWinners().Distinct().ToList();
+        
+        IEnumerable<Player> SearchForWinners()
+        {
+            foreach (Player player in Players)
+            {
+                if (player.OwnedProvinces.Count >= gameContext.GetProvincesTarget)
+                {
+                    yield return player;
+                }
 
-        //Busca si hay algún jugador que haya obtenido el número objetivo de provincias adyacentes
-        int objetivoAdyacentes = Players.Count > 3 ? 3 : 4;
-        foreach (Player jug in Players)
-            if (jug.NumRegionesAdyacentes() >= objetivoAdyacentes)
-                return jug;
-
-        return null;
+                if (player.OwnedProvinces.Count >= gameContext.GetNearProvincesTarget)
+                {
+                    yield return player;
+                }
+            }
+        }
     }
 
-    /// <summary>
-    /// Se comprueba despues de que los jugadores hayan decidido si descartarse
-    /// Si un jugador o ninguno solamente tienen cartas en la mano
-    /// </summary>
-    /// <returns></returns>
-    public bool EsFinDeRonda() => Players.Count(x => x.Hand.Count > 0) <= 1;
+    public bool IsGameEnd(GameContext gameContext) => GetAllWinners(gameContext).Count() >= 1;
 
-    public void PrepareNextBattle(Deck deck, IEnumerable<Card> discardPile, int nextBattleProvince)
+    public bool IsEndOfRound() => Players.Count(x => x.Hand.Count > 0) <= 1;
+
+    public void PrepareNextBattle(Deck deck, int nextBattleProvince)
     {
         Player? owner = Players.FirstOrDefault(x => x.Owns(nextBattleProvince));
         
@@ -132,14 +125,14 @@ public class TurnContext
 
             if (!deck.CanDeal(cardsToDraw))
             {
-                deck.Incorporate(discardPile);
+                deck.IncorporateDiscardPile();
             }
             
             IEnumerable<Card> newCards = Enumerable.Range(0, player.CardsToDraw).Select(x => deck.Draw());
 
             bool isDefending = owner is not null && owner.Id == player.Id;
+            deck.Discard(player.Army);
             player.ResetBattleLines(newCards, isDefending);
         }
-    }
-        
+    } 
 }

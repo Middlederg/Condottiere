@@ -3,11 +3,13 @@
 public class Deck
 {
     private List<Card> cards;
+    private List<Card> discardPile;
     public bool IsEmpty() => !cards.Any();
 
     public Deck(GameContext gameContext)
     {
-        cards = Create(gameContext).ToList();
+        cards = Randomizer.Shuffle(Create(gameContext).ToList()).ToList();
+        discardPile = new List<Card>();
     }
 
     public Card Draw()
@@ -27,9 +29,15 @@ public class Deck
         return cards.Count >= amount;
     }
     
-    public void Incorporate(IEnumerable<Card> newCards)
+    public void IncorporateDiscardPile()
     {
-        cards = cards.Concat(newCards).ToList();
+        IEnumerable<Card> suffledDiscardPile = Randomizer.Shuffle(discardPile);
+        cards = cards.Concat(suffledDiscardPile).ToList();
+    }
+
+    public void Discard(IEnumerable<Card> cardsToDiscard)
+    {
+        discardPile = discardPile.Concat(cardsToDiscard).ToList();
     }
 
     private IEnumerable<Card> Create(GameContext gameContext)
