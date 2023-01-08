@@ -1,11 +1,22 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.28307.757
+# Visual Studio Version 17
+VisualStudioVersion = 17.4.33205.214
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Condottiere.Core", "src\Condottiere.Core\Condottiere.Core.csproj", "{CE463F5E-72B4-4B99-92DC-656570D2B8FB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Condottiere.Core", "src\Condottiere.Core\Condottiere.Core.csproj", "{CE463F5E-72B4-4B99-92DC-656570D2B8FB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Condottiere.Test", "test\Condottiere.Test\Condottiere.Test.csproj", "{018987CA-F1B9-4E60-BDFD-238A953B9932}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Condottiere.Test", "test\Condottiere.Test\Condottiere.Test.csproj", "{018987CA-F1B9-4E60-BDFD-238A953B9932}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Elementos de la solución", "Elementos de la solución", "{6E9D07FF-4279-4ABB-9EA0-597AA2950B1B}"
+	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
+		build\dependencies.props = build\dependencies.props
+		Directory.Build.props = Directory.Build.props
+		Directory.Packages.props = Directory.Packages.props
+		global.json = global.json
+		README.md = README.md
+		spec\specification = spec\specification
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

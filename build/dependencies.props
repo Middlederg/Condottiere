@@ -1,0 +1,7 @@
+<Project>
+  <PropertyGroup>
+    <NetTargetVersion>net7.0</NetTargetVersion>
+    <NetStandardVersion>netstandard2.0</NetStandardVersion>
+    <AspNetCorePackageVersion>7.0.1</AspNetCorePackageVersion>
+  </PropertyGroup>
+</Project>
