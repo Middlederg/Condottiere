@@ -2,9 +2,9 @@
     <div class="w-full max-w-3xl flex flex-col">
         <div class="flex flex-row items-center justify-between py-2 md:py-3 px-4 md:px-8">
             <div class="flex flex-row items-center justify-between">
-                <NavLink class="text-lg font-semibold tracking-widest text-white hover:text-@Styles.MainColor-100 uppercase rounded-lg focus:outline-none focus:shadow-outline"
+                <NavLink class="text-lg font-semibold tracking-widest text-white hover:text-red-100 uppercase rounded-lg focus:outline-none focus:shadow-outline"
                          href="" Match="NavLinkMatch.All">
-                    Home
+                    Condottiere
                 </NavLink>
             </div>
             <div class="sm:hidden flex items-center">
@@ -12,8 +12,8 @@
                     <MenuIcon />
                 </button>
             </div>
-            <nav class="hidden sm:flex justify-end items-center flex-row">
-                <NavLink class="flex px-4 py-2 text-sm font-semibold rounded-lg outline-none focus:outline-none"
+            <nav class="hidden sm:flex justify-end items-center flex-row space-x-2">
+                <NavLink class="@linkClass"
                          href="prepareGame" ActiveClass=@activeClass>
 
                     <HomeIcon />
@@ -23,7 +23,7 @@
 
                 </NavLink>
 
-                <NavLink class="flex px-4 py-2 text-sm font-semibold rounded-lg outline-none focus:outline-none"
+                <NavLink class="@linkClass"
                          href="missions" ActiveClass=@activeClass>
 
                     <MapIcon />
@@ -35,7 +35,7 @@
         </div>
         <div class="@(showMenu ? "" : "hidden")">
             <nav class="flex sm:hidden flex-col space-y-2 justify-end items-center flex-row mx-auto py-2">
-                <NavLink class="flex items-center justify-center space-x-2 max-w-xs w-full px-4 py-2 text-sm uppercase font-semibold rounded-lg outline-none focus:outline-none"
+                <NavLink class=@linkClassMobile
                          href="prepareGame" ActiveClass=@activeClass>
 
                     <HomeIcon />
@@ -45,7 +45,7 @@
 
                 </NavLink>
 
-                <NavLink class="flex items-center justify-center space-x-2 max-w-xs w-full px-4 py-2 text-sm uppercase font-semibold rounded-lg outline-none focus:outline-none"
+                <NavLink class=@linkClassMobile
                          href="missions" ActiveClass=@activeClass>
 
                     <MapIcon />
@@ -60,7 +60,9 @@
 </header>
 
 @code {
-    private string activeClass = $"text-{Styles.MainColor}-900 bg-white hover:bg-{Styles.MainColor}-50";
+    private string linkClass = $"flex px-4 py-2 text-sm space-x-2 items-center font-semibold rounded-lg outline-none focus:outline-none hover:bg-{Styles.MainColor}-50 hover:text-{Styles.MainColor}-900";
+    private string linkClassMobile = $"flex items-center justify-center space-x-2 max-w-xs w-full px-4 py-2 text-sm uppercase font-semibold rounded-lg outline-none focus:outline-none hover:bg-{Styles.MainColor}-50 hover:text-{Styles.MainColor}-900";
+    private string activeClass = $"text-{Styles.MainColor}-900 bg-white";
     private bool showMenu = false;
 
     private void ToggleMenu()

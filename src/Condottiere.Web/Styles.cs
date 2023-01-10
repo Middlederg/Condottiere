@@ -1,6 +1,7 @@
 ﻿public class Styles
 {
     public const string MainColor = "red";
+    public const string Active = "text-red-900 bg-white hover:bg-red-50";
     public const string DefaultIcon = "w-4 h-4 md:w-6 md:h-6";
     public const string Link = "text-xs font-bold text-indigo-600 hover:text-indigo-800 lg:text-base";
     public const string Title = $"text-red-700 font-semibold uppercase text-xl xl:text-4xl";
