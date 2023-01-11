@@ -26,6 +26,7 @@ public class Map
     {
         Province province = SearchProvince(provinceId);
         province.TakeControl(player);
+        player.TakeControl(province);
     }
 
     private Province SearchProvince(int provinceId)

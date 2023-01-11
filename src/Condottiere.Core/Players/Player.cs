@@ -14,7 +14,7 @@ public class Player : Entity<int>
     public string Name { get; }
     public List<Card> Hand { get; private set; }
     public List<Card> Army { get; private set; }
-    public List<Province> OwnedProvinces { get; private set; }
+    public List<PlayerProvince> OwnedProvinces { get; private set; }
     public Color Color { get; }
     public Difficulty Profile { get; }
 
@@ -27,7 +27,7 @@ public class Player : Entity<int>
         Profile = profile;
         Hand = new List<Card>();
         Army = new List<Card>();
-        OwnedProvinces = new List<Province>();
+        OwnedProvinces = new List<PlayerProvince>();
     }
 
     public void ResetBattleLines(IEnumerable<Card> newCards, bool isDefending)
@@ -124,5 +124,10 @@ public class Player : Entity<int>
     public bool Owns(int provinceId)
     {
         return OwnedProvinces.Any(x => x.Id == provinceId);
+    }
+
+    public void TakeControl(Province province)
+    {
+        OwnedProvinces.Add(new PlayerProvince(province));
     }
 }

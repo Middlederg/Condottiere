@@ -6,7 +6,7 @@
     public const string Link = "text-xs font-bold text-indigo-600 hover:text-indigo-800 lg:text-base";
     public const string Title = $"text-red-700 font-semibold uppercase text-xl xl:text-4xl";
     public const string SubTitle = $"text-sm text-red-600 tracking-widest lg:text-lg";
-    public const string Container = $"h-full flex justify-center py-8";
+    public const string Container = $"max-w-3xl mx-auto px-4 md:px-8";
     public const string PrimaryButton = "w-full bg-red-700  hover:bg-red-500 text-white " + button;
     public const string SecondaryButton = "w-full bg-red-200 hover:bg-red-300 text-red-700 " + button;
     public const string PrimaryInlineButton = "bg-red-700  hover:bg-red-500 text-white " + button;
