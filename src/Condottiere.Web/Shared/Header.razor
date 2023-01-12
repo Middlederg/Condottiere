@@ -13,7 +13,7 @@
                 </button>
             </div>
             <nav class="hidden sm:flex justify-end items-center flex-row space-x-2">
-                <NavLink class="@linkClass"
+                @*<NavLink class="@linkClass"
                          href="prepareGame" ActiveClass=@activeClass>
 
                     <HomeIcon />
@@ -21,23 +21,19 @@
                         Home
                     </span>
 
-                </NavLink>
-
-                <NavLink class="@linkClass"
-                         href="missions" ActiveClass=@activeClass>
-
+                </NavLink>*@
+                
+                <button class="@linkClass"
+                        @onclick="() => map.Toggle(value: true)">
                     <MapIcon />
-                    <span>
-                        Map
-                    </span>
-                </NavLink>
+                </button>
             </nav>
         </div>
         
         @* MOBILE MENU *@
         <div class="@(showMenu ? "" : "hidden")">
             <nav class="flex sm:hidden flex-col space-y-2 justify-end items-center flex-row mx-auto py-2">
-                <NavLink class=@linkClassMobile
+               @* <NavLink class=@linkClassMobile
                          href="prepareGame" ActiveClass=@activeClass>
 
                     <HomeIcon />
@@ -45,20 +41,20 @@
                         Home
                     </span>
 
-                </NavLink>
+                </NavLink>*@
 
                 <NavLink class=@linkClassMobile
                          href="missions" ActiveClass=@activeClass>
 
                     <MapIcon />
-                    <span>
-                        Map
-                    </span>
 
                 </NavLink>
             </nav>
         </div>
     </div>
+
+    <MapComponent @ref="map" />
+    
 </header>
 
 @code {
@@ -66,6 +62,8 @@
     private string linkClassMobile = $"flex items-center justify-center space-x-2 max-w-xs w-full px-4 py-2 text-sm uppercase font-semibold rounded-lg outline-none focus:outline-none hover:bg-{Styles.MainColor}-50 hover:text-{Styles.MainColor}-900";
     private string activeClass = $"text-{Styles.MainColor}-900 bg-white";
     private bool showMenu = false;
+
+    private MapComponent? map;
 
     private void ToggleMenu()
     {

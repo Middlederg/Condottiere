@@ -41,4 +41,8 @@ public class Map
         return province;
     }
 
+    public Province Torino => Provinces.First(p => p.Id == 1);
+    public Province Milano => Provinces.First(p => p.Id == 2);
+    public Province Venezia => Provinces.First(p => p.Id == 3);
+    public Province Genova => Provinces.First(p => p.Id == 4);
 }

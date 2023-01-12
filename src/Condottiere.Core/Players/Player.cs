@@ -87,7 +87,7 @@ public class Player : Entity<int>
     {
         List<KeyValuePair<int, int>> lista = new List<KeyValuePair<int, int>>();
 
-        foreach (Province prov in OwnedProvinces)
+        foreach (PlayerProvince prov in OwnedProvinces)
         {
             //Resto de provincias
             var posiblesAdyacentes = OwnedProvinces.Where(x => !x.Equals(prov)).Select(x => x.Id);
@@ -105,7 +105,7 @@ public class Player : Entity<int>
         {
             foreach (var item in lista.Where(x => x.Value >= 2))
             {
-                Province p = OwnedProvinces.Find(x => x.Id == item.Key); //seleciona la provincia
+                var p = OwnedProvinces.Find(x => x.Id == item.Key); //seleciona la provincia
 
                 var ids = lista.Where(x => x.Key != p.Id).Select(x => x.Key); //coge el resto de ids de provincia
                 var posiblesAdyacentes = OwnedProvinces.Where(x => ids.Contains(x.Id)).SelectMany(x => x.Borders);

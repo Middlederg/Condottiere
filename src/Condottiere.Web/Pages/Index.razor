@@ -2,9 +2,12 @@
 
 <PageTitle>Condottiere</PageTitle>
 
-<div class="max-w-3xl mx-auto px-4 md:px-8">
+<CascadingValue Value="game">
+    
+    <Header />
+    
+    <div class="max-w-3xl mx-auto px-4 md:px-8">
 
-    <CascadingValue Value="this">
         @if (game is not null)
         {
             @foreach (var player in game.Turn.Players)
@@ -19,8 +22,11 @@
                 </div>
             }
         }
-    </CascadingValue>
-</div>
+
+
+    </div>
+
+</CascadingValue>
 
 @code {
 
