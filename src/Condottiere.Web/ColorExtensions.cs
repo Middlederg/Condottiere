@@ -1,17 +1,23 @@
-﻿using Condottiere.Core.Provinces;
+﻿using Condottiere.Core.Players;
+using Condottiere.Core.Provinces;
 
-namespace Condottiere.Web.Pages.Components;
+namespace Condottiere.Web;
 
-public static class ProvinceExtensions
+public static class ColorExtensions
 {
-    public static string Color(this Province province)
+    public static string ToHtml(this Province province)
     {
         if (province.Owner is null)
-        {
             return "#fff";
-        }
 
-        return province.Owner.Color switch
+        return province.ToHtml();
+    }
+
+    public static string ToHtml(this Player player) => player.Color.ToHtml();
+
+    public static string ToHtml(this Color color)
+    {
+        return color switch
         {
             Core.Players.Color.Yellow => "#ff0",
             Core.Players.Color.Blue => "#00f",
@@ -23,12 +29,4 @@ public static class ProvinceExtensions
         };
     }
 
-    public static string Opacity(this Province province)
-    {
-        if (province.Owner is null)
-        {
-            return "0.01";
-        }
-        return "1";
-    }
 }

@@ -4,10 +4,24 @@ namespace Condottiere.Core.Provinces;
 public class Map
 {
     public List<Province> Provinces { get; set; }
+    
+    private Province Get(int id) => Provinces.First(p => p.Id == id);
 
     public Map()
     {
         Provinces = MapCreator.Create().ToList();
+    }
+
+    public Province? GetBattleProvince()
+    {
+        Province? province = Provinces.SingleOrDefault(x => x.HasCondottiere);
+        return province;
+    }
+
+    public Province? GetPopeProvince()
+    {
+        Province? province = Provinces.SingleOrDefault(x => x.HasPope);
+        return province;
     }
 
     public void PlaceCondottiero(int provinceId)
@@ -41,8 +55,21 @@ public class Map
         return province;
     }
 
-    public Province Torino => Provinces.First(p => p.Id == 1);
-    public Province Milano => Provinces.First(p => p.Id == 2);
-    public Province Venezia => Provinces.First(p => p.Id == 3);
-    public Province Genova => Provinces.First(p => p.Id == 4);
+    public Province Torino => Get(1);
+    public Province Milano => Get(2);
+    public Province Venezia => Get(3);
+    public Province Genova => Get(4);
+    public Province Mantova => Get(5);
+    public Province Ferrara => Get(6);
+    public Province Parma => Get(7);
+    public Province Modena => Get(8);
+    public Province Bologna => Get(9);
+    public Province Lucca => Get(10);
+    public Province Firenze => Get(11);
+    public Province Siena => Get(12);
+    public Province Urbino => Get(13);
+    public Province Spoleto => Get(14);
+    public Province Ancona => Get(15);
+    public Province Roma => Get(16);
+    public Province Napoli => Get(17);
 }
