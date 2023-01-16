@@ -1,0 +1,29 @@
+﻿@if (Province is not null)
+{
+    <g id="@Province.Id" @onclick="(args) => ProvinceClicked(args)" style="fill:@Province.ToHtml()">
+        @if (ChildContent is not null)
+        {
+            @ChildContent(Province)
+        }
+    </g>
+}
+
+@code {
+
+    [Parameter]
+    public Province? Province { get; set; }
+
+    [Parameter]
+    public EventCallback<ProvinceClickedArgs> OnProvinceClicked { get; set; }
+
+    [Parameter]
+    public RenderFragment<Province>? ChildContent { get; set; }
+
+    private void ProvinceClicked(MouseEventArgs args)
+    {
+        if (Province is not null)
+        {
+            OnProvinceClicked.InvokeAsync(new ProvinceClickedArgs(args, Province));
+        }
+    }
+}

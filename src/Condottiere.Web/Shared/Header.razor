@@ -24,7 +24,7 @@
                 </NavLink>*@
                 
                 <button class="@linkClass"
-                        @onclick="() => map.Toggle(value: true)">
+                        @onclick="() => map.Open(option: SlideOverMap.MapSelectionOption.ChoosePope)">
                     <MapIcon />
                 </button>
             </nav>
@@ -53,7 +53,7 @@
         </div>
     </div>
 
-    <MapComponent @ref="map" />
+    <SlideOverMap @ref="map" />
     
 </header>
 
@@ -63,7 +63,7 @@
     private string activeClass = $"text-{Styles.MainColor}-900 bg-white";
     private bool showMenu = false;
 
-    private MapComponent? map;
+    private SlideOverMap? map;
 
     private void ToggleMenu()
     {

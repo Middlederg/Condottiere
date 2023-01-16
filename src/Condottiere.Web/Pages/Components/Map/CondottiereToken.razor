@@ -1,0 +1,9 @@
+﻿@if (Position is not null)
+{
+    <image href="img/fight-icon.svg" height="80" width="40" x="@Position.X" y="@Position.Y" />
+}
+
+@code {
+    [Parameter]
+    public MapPosition? Position { get; set; }
+}

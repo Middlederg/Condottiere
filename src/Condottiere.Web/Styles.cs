@@ -11,8 +11,8 @@
     public const string SecondaryButton = "w-full bg-red-200 hover:bg-red-300 text-red-700 " + button;
     public const string PrimaryInlineButton = "bg-red-700  hover:bg-red-500 text-white " + button;
     public const string SecondaryInlineButton = "bg-red-200 hover:bg-red-300 text-red-700 " + button;
-    private const string button = $"font-semibold outline-none focus:outline-none rounded-xl " +
-        $"p-2 md:p-4 md:text-xl md:text-2xl uppercase outline-none focus:outline-none flex items-center justify-center";
+    private const string button = $"font-semibold outline-none focus:outline-none rounded " +
+        $"p-2 md:p-4 md:text-xl uppercase outline-none focus:outline-none flex items-center justify-center";
     public const string Input = "font-semibold w-full block px-2 py-1.5 border border-red-400 rounded-md text-sm shadow-sm focus:outline-none focus:border-red-600";
     public const string ValidationError = "pt-1 color-red-500 text-xs font-semibold";
 }

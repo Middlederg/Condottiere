@@ -1,0 +1,175 @@
+﻿<div class="@(show ? "" : "translate-x-full") z-50 pointer-events-none fixed inset-y-0 right-0 flex max-w-full pl-10 transform transition ease-in-out duration-500 sm:duration-700">
+    <div class="pointer-events-auto w-screen max-w-xl">
+        <div class="flex h-full flex-col overflow-y-scroll bg-white shadow-xl">
+            <div class="flex-1 overflow-y-auto py-6 px-4 sm:px-6">
+                @if (Game is not null)
+                {
+                    <div class="flex items-start justify-between">
+                        <h2 class="text-lg font-medium text-gray-900" id="slide-over-title">
+                            @header
+                        </h2>
+                        <div class="ml-3 flex h-7 items-center">
+                            <button type="button" @onclick="Close"
+                                class="-m-2 p-2 text-gray-400 hover:text-gray-500">
+                                <span class="sr-only">Cerrar panel</span>
+                                <!-- Heroicon name: outline/x -->
+                                <svg class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                 stroke-width="2" stroke="currentColor" aria-hidden="true">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="mt-3 text-gray-700">
+                        <MapComponent Map=Game.Map OnProvinceClicked="ProvinceClicked" Option="option" />
+                    </div>
+                }
+            </div>
+
+            <div class="border-t border-gray-200 py-6 px-4 sm:px-6">
+                @if (Game is not null)
+                {
+                    <div class="flex justify-between text-base font-medium text-gray-900">
+                        @if (Game.Map.GetBattleProvince() is not null)
+                        {
+                            <p>
+                                Fight in @Game.Map.GetBattleProvince()!.Name
+                            </p>
+                        }
+
+                        @if (Game.Map.GetPopeProvince() is not null)
+                        {
+                            <p class="mt-0.5 text-sm text-gray-500">@Game.Map.GetPopeProvince()!.Name</p>
+                        }
+                    </div>
+
+
+                    <div class="flex items-center space-x-4 justify-center mt-2">
+
+                        <ul role="list" class="max-w-sm md:divide-y md:divide-gray-200 dark:divide-gray-700">
+                            @foreach (var (player, position) in Game.Turn.Players.Select((x, index) => (x, index + 1)))
+                            {
+                                <li class="py-1 sm:py-2">
+                                    <div class="flex items-center justify-between">
+                                        <span class="inline-flex items-center bg-green-100 text-green-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded-full dark:bg-green-900 dark:text-green-300">
+                                            <span class="w-2 h-2 mr-1 bg-green-500 rounded-full"></span>
+                                            @player.Name
+                                        </span>
+                                        <p class="text-sm text-gray-500 truncate dark:text-gray-400">
+                                            @player.OwnedProvinces.Count provinces
+                                        </p>
+                                    </div>
+                                </li>
+                            }
+                        </ul>
+                    </div>
+
+                    <div class="flex items-center justify-between space-x-4">
+                        <button type="button" @onclick="Accept"
+                            class="@Styles.PrimaryButton">
+
+                            <svg xmlns="http://www.w3.org/2000/svg" class="@Styles.DefaultIcon" viewBox="0 0 24 24" stroke-width="3" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                                <path d="M5 12l5 5l10 -10" />
+                            </svg>
+
+                            <span class="ml-2"> OK </span>
+
+                        </button>
+
+                        <button type="button" @onclick="Close"
+                            class="@Styles.SecondaryButton">
+
+                            <span class="ml-2"> Cancel </span>
+
+                        </button>
+                    </div>
+
+
+
+                    <div class="hidden mt-4 text-sm text-lola-red">
+                        <p>
+                            ¡Vaya! El pedido no se ha podido procesar.
+                        </p>
+                        <p class="mt-2">
+                            Intentalo de nuevo en unos minutos o contacta directamente con <a class="text-lola-green font-medium" href="mailto:loladesayuna@gmail.com">
+                                loladesayuna@gmail.com
+                            </a>
+                        </p>
+                    </div>
+                }
+
+                <FightIcon />
+                <CrossIcon />
+            </div>
+        </div>
+    </div>
+</div>
+
+@code {
+    private bool show = false;
+    private MapSelectionOption option = MapSelectionOption.None;
+    private string header = "Map";
+
+    private ProvinceClickedArgs? selectedProvince = null;
+
+    [CascadingParameter]
+    public Game Game { get; set; } = null!;
+
+    private void Toggle(bool value)
+    {
+        show = value;
+        StateHasChanged();
+    }
+
+    public void Open(MapSelectionOption option = MapSelectionOption.None)
+    {
+        this.option = option;
+        Toggle(value: true);
+    }
+
+    private void Close()
+    {
+        if (option != MapSelectionOption.None)
+        {
+            show = false;
+            StateHasChanged();
+        }
+    }
+
+    public enum MapSelectionOption
+    {
+        None,
+        ChooseCondottiere,
+        ChoosePope
+    }
+
+    int i = 1;
+    private void Accept()
+    {
+        if (selectedProvince is null)
+        {
+            return;
+        }
+
+        if (option == MapSelectionOption.ChooseCondottiere)
+        {
+            Game.Map.PlaceCondottiero(selectedProvince.Province.Id, selectedProvince.Position);
+            return;
+        }
+
+        if (option == MapSelectionOption.ChoosePope)
+        {
+            Game.Map.PlacePope(selectedProvince.Province.Id, selectedProvince.Position);
+        }
+
+        //Game.Map.TakeControl(i++, Game.Turn.CurrentPlayer);
+    }
+
+    private void ProvinceClicked(ProvinceClickedArgs args)
+    {
+
+        selectedProvince = args;
+    }
+}

@@ -15,6 +15,7 @@ public record VictoryOptions(int Provinces, int NearProvinces);
 public class GameContext
 {
     public int PlayerCount { get; }
+    public bool WithSieges { get; }
     public SpringOptions SpringOptions { get; }
     public BishopOptions BishopOptions { get; }
 
@@ -27,9 +28,10 @@ public class GameContext
         {6, new VictoryOptions(5, 3)},
     };
 
-    public GameContext(int totalPlayers, SpringOptions springOptions, BishopOptions bishopOptions)
+    public GameContext(int totalPlayers, bool withSieges, SpringOptions springOptions, BishopOptions bishopOptions)
     {
         PlayerCount = totalPlayers;
+        WithSieges = withSieges;
         SpringOptions = springOptions;
         BishopOptions = bishopOptions;
         CurrentSeason = Season.None;

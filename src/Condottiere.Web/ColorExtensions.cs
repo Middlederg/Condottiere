@@ -10,10 +10,11 @@ public static class ColorExtensions
         if (province.Owner is null)
             return "#fff";
 
-        return province.ToHtml();
+        return province.Owner.ToHtml();
     }
 
     public static string ToHtml(this Player player) => player.Color.ToHtml();
+    public static string ToHtml(this ProvinceOwner owner) => owner.Color.ToHtml();
 
     public static string ToHtml(this Color color)
     {

@@ -14,7 +14,7 @@ public class Map
 
     public Province? GetBattleProvince()
     {
-        Province? province = Provinces.SingleOrDefault(x => x.HasCondottiere);
+        Province? province = Provinces.SingleOrDefault(x => x.HasCondottiero);
         return province;
     }
 
@@ -24,16 +24,16 @@ public class Map
         return province;
     }
 
-    public void PlaceCondottiero(int provinceId)
+    public void PlaceCondottiero(int provinceId, MapPosition position)
     {
         Province province = SearchProvince(provinceId);
-        province.PlaceCondottiero();
+        province.PlaceCondottiero(position);
     }
 
-    public void PlacePope(int provinceId)
+    public void PlacePope(int provinceId, MapPosition position)
     {
         Province province = SearchProvince(provinceId);
-        province.PlacePope();
+        province.PlacePope(position);
     }
 
     public void TakeControl(int provinceId, Player player)
@@ -73,3 +73,5 @@ public class Map
     public Province Roma => Get(16);
     public Province Napoli => Get(17);
 }
+
+public record MapPosition(double X, double Y);

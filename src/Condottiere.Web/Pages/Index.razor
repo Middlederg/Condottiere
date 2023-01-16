@@ -2,36 +2,35 @@
 
 <PageTitle>Condottiere</PageTitle>
 
-<CascadingValue Value="game">
-    <CascadingValue Value="gameContext">
+<CascadingValue Value="gameContext">
+    <CascadingValue Value="game">
 
         <Header />
-    
-    <div class="max-w-3xl mx-auto px-4 md:px-8">
 
-        @if (game is not null)
-        {
-            @foreach (var player in game.Turn.Players)
+        <div class="max-w-3xl mx-auto px-4 md:px-8">
+
+            @if (game is not null)
             {
-                <div class="flex justify-between items-center">
-                    <span>
-                        @player.Name
-                    </span>
-                    <span>
-                        @player.Points(gameContext)
-                    </span>
-                </div>
+                @foreach (var player in game.Turn.Players)
+                {
+                    <div class="flex justify-between items-center">
+                        <span>
+                            @player.Name
+                        </span>
+                        <span>
+                            @player.Points(gameContext)
+                        </span>
+                    </div>
+                }
             }
-        }
 
-
-    </div>
+        </div>
     </CascadingValue>
 </CascadingValue>
 
 @code {
 
-    private GameContext gameContext = new GameContext(4, new SpringOptions(), new BishopOptions());
+    private GameContext gameContext = new GameContext(4, withSieges: false, new SpringOptions(), new BishopOptions());
     private Game? game;
 
     protected override void OnInitialized()
