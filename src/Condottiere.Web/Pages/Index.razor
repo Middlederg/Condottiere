@@ -7,34 +7,65 @@
 
         <Header />
 
-        <div class="max-w-3xl mx-auto px-4 md:px-8">
+        <div class="max-w-3xl mx-auto p-4 md:p-8">
 
             @if (game is not null)
             {
-                @foreach (var player in game.Turn.Players)
-                {
-                    <div class="flex justify-between items-center">
-                        <span>
-                            @player.Name
-                        </span>
-                        <span>
-                            @player.Points(gameContext)
-                        </span>
+                <div class="flex flex-col space-y-2">
+
+                    @foreach (var player in game.Turn.Opponents)
+                    {
+                        <PlayerStatus Player="player" />
+                    }
+                </div>
+
+
+                <div class="flex flex-col space-y-4 mt-8">
+
+                    <div class="border rounded @game.Turn.MainPlayer.Color.ToTailwindBox()">
+
+                        <PlayerStatus Player="@game.Turn.MainPlayer" />
                     </div>
-                }
+                </div>
+
             }
 
+            <div class="flex items-center justify-between space-x-4 mt-8">
+                <button type="button" @onclick="ChooseCard"
+                        class="@Styles.PrimaryButton">
+
+                    <span class="ml-2"> PLAY </span>
+
+                </button>
+
+                <button type="button" @onclick="Pass"
+                        class="@Styles.SecondaryButton">
+
+                    <span class="ml-2"> PASS </span>
+
+                </button>
+            </div>
         </div>
     </CascadingValue>
 </CascadingValue>
 
 @code {
 
-    private GameContext gameContext = new GameContext(4, withSieges: false, new SpringOptions(), new BishopOptions());
+    private GameContext gameContext = new GameContext(6, withSieges: false, new SpringOptions(), new BishopOptions());
     private Game? game;
 
     protected override void OnInitialized()
     {
         game = new Game(gameContext);
+    }
+
+    private void ChooseCard()
+    {
+
+    }
+
+    private void Pass()
+    {
+
     }
 }

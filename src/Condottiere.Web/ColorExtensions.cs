@@ -20,14 +20,29 @@ public static class ColorExtensions
     {
         return color switch
         {
-            Core.Players.Color.Yellow => "#ff0",
-            Core.Players.Color.Blue => "#00f",
-            Core.Players.Color.Gray => "#888",
-            Core.Players.Color.Red => "#f00",
-            Core.Players.Color.Pink => "#f0f",
-            Core.Players.Color.Green => "#0f0",
+            Color.Yellow => "#ff0",
+            Color.Blue => "#00f",
+            Color.Gray => "#888",
+            Color.Red => "#f00",
+            Color.Pink => "#f0f",
+            Color.Green => "#0f0",
             _ => "#fff",
         };
     }
 
+    public static string ToTailwindText(this Color color) => $"text-{color.ToTailwindColor()}-700";
+    public static string ToTailwindBox(this Color color) => $"text-{color.ToTailwindColor()}-700 bg-{color.ToTailwindColor()}-50 border-{color.ToTailwindColor()}-200";
+    public static string ToTailwindColor(this Color color)
+    {
+        return color switch
+        {
+            Color.Yellow => "yellow",
+            Color.Blue => "sky",
+            Color.Gray => "gray",
+            Color.Red => "red",
+            Color.Pink => "purple",
+            Color.Green => "emerald",
+            _ => "",
+        };
+    }
 }

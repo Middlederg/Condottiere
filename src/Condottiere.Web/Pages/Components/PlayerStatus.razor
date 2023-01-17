@@ -1,0 +1,54 @@
+﻿@if (Player is not null)
+{
+    <div class="flex justify-between items-end space-x-4 rounded py-1 px-3 @Player.Color.ToTailwindText()">
+        <span class="flex items-center space-x-1 font-semibold flex-1 mb-1.5">
+            <span>
+                @Player.Name
+            </span>
+            <span>
+                <svg xmlns="http://www.w3.org/2000/svg" class="@Styles.DefaultIcon" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                    <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                    <polyline points="11 7 6 12 11 17" />
+                    <polyline points="17 7 12 12 17 17" />
+                </svg>
+            </span>
+      
+        </span>
+        <div class="flex justify-between items-center space-x-8 mb-1.5">
+            <span class="font-mono font-bold text-2xl">
+                !
+            </span>
+            <span class="flex space-x-1 items-center font-mono rounded border @Player.Color.ToTailwindBox() p-1">
+                <span>
+                    @Player.TotalCloseRegions()/@Player.OwnedProvinces.Count
+                </span>
+                <RegionIcon Style="@Styles.DefaultIcon" />
+            </span>
+            <span class="flex space-x-1 items-center font-mono rounded border @Player.Color.ToTailwindBox() p-1">
+                <span>
+                    @Player.Hand.Count
+                </span>
+                <CardsIcon Style="@Styles.DefaultIcon" />
+            </span>
+        </div>
+        <div class="flex items-end">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-14 w-14" viewBox="0 0 24 24" stroke-width="1" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                <path d="M12 3a12 12 0 0 0 8.5 3a12 12 0 0 1 -8.5 15a12 12 0 0 1 -8.5 -15a12 12 0 0 0 8.5 -3" />
+                <text x="6" y="16" class="text-xs font-mono">
+                    69
+                </text>
+            </svg>
+            <span class="mb-1.5" title="Has pass this round">
+                <PassIcon Style="@Styles.DefaultIcon" />
+            </span>
+        </div>
+    </div>
+}
+@code {
+    [CascadingParameter]
+    public GameContext GameContext { get; set; } = null!;
+
+    [Parameter]
+    public Player? Player { get; set; }
+}

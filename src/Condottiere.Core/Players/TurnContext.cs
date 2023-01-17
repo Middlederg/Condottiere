@@ -9,6 +9,9 @@ public class TurnContext
     public int Index { get; private set; }
 
     public List<Player> Players { get; }
+    public IEnumerable<Player> Opponents => Players.Where(x => x.Profile != Difficulty.Human);
+    public Player MainPlayer => Players.First(x => x.Profile == Difficulty.Human);
+
     private int currentPlayerIndex;
     public int TotalPlayers => Players.Count;
 

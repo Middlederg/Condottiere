@@ -79,11 +79,7 @@ public class Player : Entity<int>
 
     public PlayerSummary ToSummary(GameContext gameContext) => new(Id, Name, Color, Points(gameContext));
 
-    /// <summary>
-    /// Indica el número de regiones adyacentes que controla el jugador
-    /// </summary>
-    /// <returns></returns>
-    public int NumRegionesAdyacentes()
+    public int TotalCloseRegions()
     {
         List<KeyValuePair<int, int>> lista = new List<KeyValuePair<int, int>>();
 
