@@ -11,7 +11,7 @@ public class Mercenary : Card
         Value = value;
     }
 
-    public override string Path() => $"mercenary-{Value}";
+    public override string Path() => $"mercenary-{Value}.jpg";
 
     public override string ToString() => $"Mercenary: {Value}";
 

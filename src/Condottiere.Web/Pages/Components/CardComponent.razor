@@ -1,0 +1,25 @@
+﻿@if (InnerCard is not null)
+{
+    <img src="img/cards/sd/@InnerCard.Path()" class="w-16" />
+}
+
+
+@code {
+    [Parameter]
+    public bool IsClickable { get; set; } = true;
+
+    [Parameter]
+    public bool IsSelected { get; set; } = false;
+
+    [Parameter]
+    public Card? InnerCard { get; set; }
+
+    [Parameter]
+    public EventCallback<Card> OnCardSelected { get; set; }
+
+    private async Task CardSelected()
+    {
+        await OnCardSelected.InvokeAsync(InnerCard);
+    }
+
+}

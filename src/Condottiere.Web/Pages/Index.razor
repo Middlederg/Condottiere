@@ -28,28 +28,40 @@
                     </div>
                 </div>
 
-            }
 
-            <div class="flex items-center justify-between space-x-4 mt-8">
-                <button type="button" @onclick="ChooseCard"
+                <div class="flex items-center justify-between space-x-4 mt-8">
+                    <button type="button" @onclick="ChooseCard"
                         class="@Styles.PrimaryButton">
 
-                    <span class="ml-2"> PLAY </span>
+                        <span class="ml-2"> PLAY </span>
 
-                </button>
+                    </button>
 
-                <button type="button" @onclick="Pass"
+                    <button type="button" @onclick="Pass"
                         class="@Styles.SecondaryButton">
 
-                    <span class="ml-2"> PASS </span>
+                        <span class="ml-2"> PASS </span>
 
-                </button>
-            </div>
+                    </button>
+                </div>
+
+                <SlideOverBottom @ref="cardPanel" Header="Select a card to play" OnAccepted="Play">
+                     <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+
+                        @foreach (var card in game.Turn.MainPlayer.Hand)
+                        {
+                            <CardComponent InnerCard="card" />
+                        }
+                    </div>
+                </SlideOverBottom>
+            }
+
         </div>
     </CascadingValue>
 </CascadingValue>
 
 @code {
+    private SlideOverBottom? cardPanel;
 
     private GameContext gameContext = new GameContext(6, withSieges: false, new SpringOptions(), new BishopOptions());
     private Game? game;
@@ -57,9 +69,15 @@
     protected override void OnInitialized()
     {
         game = new Game(gameContext);
+        game.PrepareNextBattle(1);
     }
 
     private void ChooseCard()
+    {
+        cardPanel?.Open();
+    }
+
+    private void Play()
     {
 
     }

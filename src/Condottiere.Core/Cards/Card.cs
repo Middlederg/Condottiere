@@ -6,8 +6,7 @@ public abstract class Card : Entity<int>
 {
     public abstract CardType Type { get; }
 
-    public virtual string Path() => $"{GetType().Name.ToLower()}";
-    public string PathSd() => Path() + "sd";
+    public virtual string Path() => $"{GetType().Name.ToLower()}.jpg";
 
     protected Card(int id) : base(id) { }
 
