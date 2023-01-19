@@ -1,0 +1,30 @@
+﻿@page "/deck"
+
+<PageTitle>Deck</PageTitle>
+
+<div class="max-w-3xl mx-auto p-4 md:p-8">
+    <section class="grid grid-cols-4 gap-4">
+
+        @if (cards is not null)
+        {
+
+            @foreach (var card in cards)
+            {
+                <Condottiere.Web.Pages.Components.Cards.CardComponent InnerCard="card" />
+            }
+        }
+    </section>
+
+</div>
+
+@code {
+
+    private IEnumerable<Card> cards;
+    private GameContext gameContext = new GameContext(6, withSieges: false, new SpringOptions(), new BishopOptions());
+
+    protected override void OnInitialized()
+    {
+        var deck = new Deck(gameContext);
+        cards = Enumerable.Range(0, 70).Select(x => deck.Draw()).ToList();
+    }
+}

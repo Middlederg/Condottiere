@@ -1,6 +1,6 @@
 ﻿namespace Condottiere.Core.Cards;
 
-public class Heroine : Card
+public class Heroine : Card, IValuableCard
 {
     public override CardType Type => CardType.Special;
 

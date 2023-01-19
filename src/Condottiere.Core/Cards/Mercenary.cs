@@ -1,6 +1,6 @@
 ﻿namespace Condottiere.Core.Cards;
 
-public class Mercenary : Card
+public class Mercenary : Card, IValuableCard
 {
     public override CardType Type => CardType.Mercenary;
 

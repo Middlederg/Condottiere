@@ -1,4 +1,5 @@
-﻿using Condottiere.Core.Players;
+﻿using Condottiere.Core;
+using Condottiere.Core.Players;
 using Condottiere.Core.Provinces;
 
 namespace Condottiere.Web;
@@ -42,6 +43,17 @@ public static class ColorExtensions
             Color.Red => "red",
             Color.Pink => "purple",
             Color.Green => "emerald",
+            _ => "",
+        };
+    }
+
+    public static string ToTailwindColor(this Card card)
+    {
+        return card.Type switch
+        {
+            CardType.Mercenary => "gray-700",
+            CardType.Special => "gray-700",
+            CardType.Action => "gray-500",
             _ => "",
         };
     }
