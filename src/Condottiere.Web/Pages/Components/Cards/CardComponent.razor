@@ -1,38 +1,33 @@
 ﻿@if (InnerCard is not null)
 {
     <label class="cursor-pointer w-16 h-24 md:w-24 md:h-32 lg:w-32 lg:h-44 border-2 border-@InnerCard.ToTailwindColor()
-        @(IsSelected ? "outline outline-slate-500 outline-offset-2 md:outline-offset-4 outline-2" : "outline-none")
+        @(IsSelected ? "outline outline-red-500 outline-offset-2 outline-dotted md:outline-offset-4 outline-2" : "outline-none")
         @(IsClickable ? "hover:shadow-lg" : "")
        rounded-lg p-1 md:p-1.5">
 
         <input type="radio"
            id="@InnerCard.Id"
            value="@InnerCard.Id"
-           name="@nameof(InnerCard.Id)"
+           name="selection"
            class="hidden"
            @onchange="(args) => CardSelected()" />
 
-        <span class="w-full h-full flex items-center justify-center rounded-md bg-@InnerCard.ToTailwindColor() text-white">
-            <span class="flex flex-col">
+        <span class="w-full h-full flex justify-center rounded-md bg-@InnerCard.ToTailwindColor() text-white">
+            <span class="flex flex-col w-full px-2">
                 @if (InnerCard is IValuableCard valuable)
                 {
-                    <span class="flex items-center justify-between">
+                    <span class="flex items-center justify-between md:p-1">
                         <span class="text-sm md:text-xl font-mono font-bold">
                             @valuable.Value
                         </span>
-                        <CardIconRenderer Card="InnerCard" />
                         <span class="text-sm md:text-xl font-mono font-bold">
                             @valuable.Value
                         </span>
                     </span>
                 }
 
-                <span class="flex-1">
-
-                    @if (InnerCard.Type == CardType.Action)
-                    {
-                        <CardIconRenderer Card="InnerCard" />
-                    }
+                <span class="flex-1 flex justify-center items-center md:mb-4">
+                    <CardIconRenderer Card="InnerCard" />
                 </span>
             </span>
         </span>

@@ -17,14 +17,18 @@ public class Status
     public void Pass()
     {
         if (!(isDefending && isWaiting))
+        {
             hasPassed = true;
+        }
     }
 
     public void Play()
     {
         if (isDefending)
+        {
             isWaiting = false;
+        }
     }
 
-    public bool CanPlayMoreCards => !hasPassed;
+    public bool HasPassed => hasPassed;
 }

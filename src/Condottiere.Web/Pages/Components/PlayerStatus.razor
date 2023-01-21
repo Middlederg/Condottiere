@@ -5,19 +5,40 @@
             <span>
                 @Player.Name
             </span>
-            <span>
-                <svg xmlns="http://www.w3.org/2000/svg" class="@Styles.DefaultIcon" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                    <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                    <polyline points="11 7 6 12 11 17" />
-                    <polyline points="17 7 12 12 17 17" />
-                </svg>
-            </span>
-      
+            @if (Player == Game.Turn.CurrentPlayer)
+            {
+                <span>
+                    <svg xmlns="http://www.w3.org/2000/svg" class="@Styles.DefaultIcon" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                        <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                        <polyline points="11 7 6 12 11 17" />
+                        <polyline points="17 7 12 12 17 17" />
+                    </svg>
+                </span>
+            }
+
+
+
         </span>
         <div class="flex justify-between items-center space-x-8 mb-1.5">
-            <span class="font-mono font-bold text-2xl">
-                !
-            </span>
+            @if (Player.IsAboutToWin(GameContext, Game.Map.GetBattleProvince()))
+            {
+                <span class="font-mono font-bold text-2xl">
+                    !
+                </span>
+            }
+            
+            @if (Game.Turn.IsEndOfBattle() && Game.Turn.BattleWinner(GameContext)!.Id == Player.Id)
+            {
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="@Styles.DefaultIcon" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                    <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                    <line x1="8" y1="21" x2="16" y2="21" />
+                    <line x1="12" y1="17" x2="12" y2="21" />
+                    <line x1="7" y1="4" x2="17" y2="4" />
+                    <path d="M17 4v8a5 5 0 0 1 -10 0v-8" />
+                    <circle cx="5" cy="9" r="2" />
+                    <circle cx="19" cy="9" r="2" />
+                </svg>
+            }
             <span class="flex space-x-1 items-center font-mono rounded border @Player.Color.ToTailwindBox() p-1">
                 <span>
                     @Player.TotalCloseRegions()/@Player.OwnedProvinces.Count
@@ -32,23 +53,46 @@
             </span>
         </div>
         <div class="flex items-end">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-14 w-14" viewBox="0 0 24 24" stroke-width="1" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                <path d="M12 3a12 12 0 0 0 8.5 3a12 12 0 0 1 -8.5 15a12 12 0 0 1 -8.5 -15a12 12 0 0 0 8.5 -3" />
-                <text x="6" y="16" class="text-xs font-mono">
-                    69
-                </text>
-            </svg>
-            <span class="mb-1.5" title="Has pass this round">
-                <PassIcon Style="@Styles.DefaultIcon" />
-            </span>
+            <button type="button" @onclick="() => cardPanel?.Open()" class="pointer">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-14 w-14" viewBox="0 0 24 24" stroke-width="1" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                    <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                    <path d="M12 3a12 12 0 0 0 8.5 3a12 12 0 0 1 -8.5 15a12 12 0 0 1 -8.5 -15a12 12 0 0 0 8.5 -3" />
+                    <text x="50%" y="50%" style="text-anchor: middle; alignment-baseline:middle" class="text-xs font-mono">
+                        @Player.Points(GameContext)
+                    </text>
+                </svg>
+            </button>
+            @if (!Player.CanPlayMoreCards)
+            {
+                <span class="mb-1.5" title="Has pass this round">
+                    <PassIcon Style="@Styles.DefaultIcon" />
+                </span>
+            }
         </div>
     </div>
+
+    <SlideOverBottom @ref="cardPanel" Header=@headerText ShowButtons=false>
+        <div class="grid grid-cols-4 md:grid-cols-5 gap-4">
+
+            @foreach (var card in Player.Army)
+            {
+                <CardComponent InnerCard="card" IsClickable="false" />
+            }
+        </div>
+    </SlideOverBottom>
+
 }
 @code {
+    private SlideOverBottom? cardPanel;
+
     [CascadingParameter]
     public GameContext GameContext { get; set; } = null!;
 
+    [CascadingParameter]
+    public Game Game { get; set; } = null!;
+
     [Parameter]
     public Player? Player { get; set; }
+
+    private string headerText => $"Army from {Player?.Name ?? ""}";
 }

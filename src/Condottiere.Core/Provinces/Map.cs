@@ -36,9 +36,9 @@ public class Map
         province.PlacePope(position);
     }
 
-    public void TakeControl(int provinceId, Player player)
+    public void TakeControl(Province province, Player player)
     {
-        Province province = SearchProvince(provinceId);
+        //Province province = SearchProvince(province.Id);
         province.TakeControl(player);
         player.TakeControl(province);
     }

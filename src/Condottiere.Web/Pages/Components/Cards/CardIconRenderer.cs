@@ -12,6 +12,9 @@ public class CardIconRenderer : ComponentBase
     [Parameter]
     public Card? Card { get; set; }
 
+    [Parameter]
+    public string Style { get; set; } = "w-8 w-8 md:w-12 md:h-12";
+
     private static int index = 0;
 
     protected override void BuildRenderTree(RenderTreeBuilder builder)
@@ -24,24 +27,30 @@ public class CardIconRenderer : ComponentBase
         _ = Card switch
         {
             Courtisan => RenderIcon<CourtisanIcon>(builder),
-            Drums => RenderIcon<DrumsIcon>(builder, "w-12 h-12"),
+            Drums => RenderIcon<DrumsIcon>(builder),
             Heroine => RenderIcon<HeroineIcon>(builder),
-            Bishop => RenderIcon<BishopIcon>(builder, "w-12 h-12"),
-            Scarecrow => RenderIcon<ScarecrowIcon>(builder, "w-12 h-12"),
-            Surrender => RenderIcon<SurrenderIcon>(builder, "w-12 h-12"),
-            Mercenary => RenderIcon<MercenaryIcon>(builder),
-            SeasonChanger changer => changer.Season == Season.Winter ? RenderIcon<WinterIcon>(builder, "w-12 h-12") : RenderIcon<SpringIcon>(builder, "w-12 h-12"),
+            Bishop => RenderIcon<BishopIcon>(builder),
+            Scarecrow => RenderIcon<ScarecrowIcon>(builder),
+            Surrender => RenderIcon<SurrenderIcon>(builder),
+            Mercenary mercenary => RenderIcon<MercenaryIcon>(builder, mercenary.Value == 10),
+            SeasonChanger changer => changer.Season == Season.Winter ? RenderIcon<WinterIcon>(builder) : RenderIcon<SpringIcon>(builder),
             _ => throw new NotImplementedException()
         };
     }
 
-    private bool RenderIcon<T>(RenderTreeBuilder builder, string? style = null) where T : IComponent
+    private bool RenderIcon<T>(RenderTreeBuilder builder, bool isStrong = false) where T : IComponent
     {
         builder.OpenComponent<T>(index++);
-        if (style is not null)
+        if (Style is not null)
         {
-            builder.AddAttribute(index++, "Style", style);
+            builder.AddAttribute(index++, "Style", Style);
         }
+
+        if (isStrong)
+        {
+            builder.AddAttribute(index++, "IsStrong", isStrong);
+        }
+        
         builder.CloseComponent();
         return true;
     }

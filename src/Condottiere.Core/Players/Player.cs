@@ -37,6 +37,7 @@ public class Player : Entity<int>
         Army = new List<Card>();
     }
 
+    //public bool HasPassed => status?.HasPassed ?? false;
     public bool CanPlayMoreCards
     {
         get
@@ -46,7 +47,7 @@ public class Player : Entity<int>
                 return false;
             }
             
-            return Hand.Any() && status.CanPlayMoreCards;
+            return Hand.Any() && !status.HasPassed;
         }
     }
 
@@ -54,8 +55,14 @@ public class Player : Entity<int>
     {
         Hand.Remove(card);
         Army.Add(card);
+        status?.Play();
     }
 
+    public void Pass()
+    {
+        status?.Pass();
+    }
+    
     public int Points(GameContext gameContext)
     {
         IEnumerable<Mercenary> mercenaries = Army.GetOfType<Mercenary>();
@@ -126,4 +133,17 @@ public class Player : Entity<int>
     {
         OwnedProvinces.Add(new PlayerProvince(province));
     }
+
+    public bool IsAboutToWin(GameContext gameContext, Province? battleProvince)
+    {
+        if (!CanPlayMoreCards)
+        {
+            return false;
+        }
+
+        return false; //TODO
+    }
+
+    public Card? Choose() => Hand.GetRandomItem();
 }
+    

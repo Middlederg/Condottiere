@@ -11,12 +11,19 @@ public class TurnContext
     public List<Player> Players { get; }
     public IEnumerable<Player> Opponents => Players.Where(x => x.Profile != Difficulty.Human);
     public Player MainPlayer => Players.First(x => x.Profile == Difficulty.Human);
+    public bool IsMainPlayerTurn => CurrentPlayer == MainPlayer;
 
     private int currentPlayerIndex;
     public int TotalPlayers => Players.Count;
+    public bool IsCurrentPlayerWinning(GameContext gameContext) => BattleWinner(gameContext) == CurrentPlayer;
 
     public TurnContext(IEnumerable<Player> players)
     {
+        if (players.Count(x => x.Profile == Difficulty.Human) != 1)
+        {
+            throw new ArgumentException("There must be exactly one human player");
+        }
+        
         Players = players.ToList();
         currentPlayerIndex = 0;
         Index = 0;
@@ -41,12 +48,12 @@ public class TurnContext
             .ToList();
     }
 
-    public PlayerSummary? BattleWinner(GameContext gameContext)
+    public Player? BattleWinner(GameContext gameContext)
     {
         IEnumerable<PlayerSummary> allPlayers = GetBattleRanking(gameContext);
         int maxPoints = allPlayers.Max(x => x.Points);
         IEnumerable<PlayerSummary> playersWithMaxPoints = allPlayers.Where(x => x.Points == maxPoints);
-        return playersWithMaxPoints.Count() == 1 ? playersWithMaxPoints.First() : null;
+        return playersWithMaxPoints.Count() == 1 ? Players.First(x => x.Id == playersWithMaxPoints.First().Id) : null;
     }
 
     public void NextTurn()
@@ -66,7 +73,7 @@ public class TurnContext
         if (Players.SelectMany(x => x.Army).IsPlayed<Surrender>())
             return true;
 
-        if (Players.Count(x => x.CanPlayMoreCards) < 2)
+        if (!Players.Any(x => x.CanPlayMoreCards))
             return true;
 
         return false;
@@ -114,7 +121,7 @@ public class TurnContext
         }
     }
 
-    public bool IsGameEnd(GameContext gameContext) => GetAllWinners(gameContext).Count() >= 1;
+    public bool IsGameEnd(GameContext gameContext) => GetAllWinners(gameContext).Any();
 
     public bool IsEndOfRound() => Players.Count(x => x.Hand.Count > 0) <= 1;
 

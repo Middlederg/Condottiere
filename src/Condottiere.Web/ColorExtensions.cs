@@ -52,7 +52,7 @@ public static class ColorExtensions
         return card.Type switch
         {
             CardType.Mercenary => "gray-700",
-            CardType.Special => "gray-700",
+            CardType.Special => "teal-700",
             CardType.Action => "gray-500",
             _ => "",
         };

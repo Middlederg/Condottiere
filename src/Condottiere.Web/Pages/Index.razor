@@ -28,29 +28,31 @@
                     </div>
                 </div>
 
-
                 <div class="flex items-center justify-between space-x-4 mt-8">
-                    <button type="button" @onclick="ChooseCard"
+                    @if (!autoplaying)
+                    {
+                        <button type="button" @onclick="ChooseCard"
                         class="@Styles.PrimaryButton">
 
-                        <span class="ml-2"> PLAY </span>
+                            <span class="ml-2"> PLAY </span>
 
-                    </button>
+                        </button>
 
-                    <button type="button" @onclick="Pass"
+                        <button type="button" @onclick="Pass"
                         class="@Styles.SecondaryButton">
 
-                        <span class="ml-2"> PASS </span>
+                            <span class="ml-2"> PASS </span>
 
-                    </button>
+                        </button>
+                    }
                 </div>
 
                 <SlideOverBottom @ref="cardPanel" Header="Select a card to play" OnAccepted="Play">
-                     <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                    <div class="grid grid-cols-4 md:grid-cols-5 gap-4">
 
                         @foreach (var card in game.Turn.MainPlayer.Hand)
                         {
-                            <CardComponent InnerCard="card" />
+                            <CardComponent InnerCard="card" IsSelected="selectedCard == card" OnCardSelected="CardSelected" />
                         }
                     </div>
                 </SlideOverBottom>
@@ -66,10 +68,15 @@
     private GameContext gameContext = new GameContext(6, withSieges: false, new SpringOptions(), new BishopOptions());
     private Game? game;
 
-    protected override void OnInitialized()
+    private Card? selectedCard;
+
+    private bool autoplaying = false;
+
+    protected async override Task OnInitializedAsync()
     {
         game = new Game(gameContext);
         game.PrepareNextBattle(1);
+        await AutoPlay();
     }
 
     private void ChooseCard()
@@ -77,13 +84,83 @@
         cardPanel?.Open();
     }
 
-    private void Play()
+    private async Task Play()
     {
-
+        if (selectedCard is not null && game is not null)
+        {
+            game.Turn.MainPlayer.Play(selectedCard);
+            game.Turn.NextTurn();
+            cardPanel?.Close();
+            await AutoPlay();
+        }
     }
 
-    private void Pass()
+    private async Task Pass()
     {
+        if (game is not null)
+        {
+            game.Turn.MainPlayer.Pass();
+            game.Turn.NextTurn();
+            cardPanel?.Close();
+            await AutoPlay();
+        }
+    }
+
+    private void CardSelected(Card card)
+    {
+        selectedCard = card;
+    }
+
+    private async Task AutoPlay()
+    {
+        autoplaying = true;
+        if (game is null)
+        {
+            return;
+        }
+
+        if (game.Turn.IsEndOfBattle())
+        {
+            EndOfBattle();
+            return;
+        }
+
+        while (!game.Turn.IsMainPlayerTurn)
+        {
+            game.AutoPlay(gameContext);
+            game.Turn.NextTurn();
+            await Task.Delay(1000);
+            StateHasChanged();
+
+            if (game.Turn.IsEndOfBattle())
+            {
+                EndOfBattle();
+                break;
+            }
+        }
+
+        autoplaying = false;
+    }
+
+    private void EndOfBattle()
+    {
+        if (game is null)
+        {
+            return;
+        }
+
+        Player? winner = game.Turn.BattleWinner(gameContext);
+
+        if (winner is not null)
+        {
+            var battleProvince = game.Map.GetBattleProvince();
+            if (battleProvince is not null)
+            {
+                game.Map.TakeControl(battleProvince, winner);
+                //game.PrepareNextBattle(1);
+                StateHasChanged();
+            }
+        }
 
     }
 }
