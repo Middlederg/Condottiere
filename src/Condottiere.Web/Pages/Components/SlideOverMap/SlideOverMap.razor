@@ -10,7 +10,7 @@
                         </h2>
                         <div class="ml-3 flex h-7 items-center">
                             <button type="button" @onclick="Close"
-                                class="-m-2 p-2 text-gray-400 hover:text-gray-500">
+                                class="-m-2 p-2 text-gray-400 hover:text-gray-500 @(option == MapSelectionOption.None ? "" : "hidden")">
                                 <span class="sr-only">Cerrar panel</span>
                                 <!-- Heroicon name: outline/x -->
                                 <svg class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
@@ -65,39 +65,29 @@
                         </ul>
                     </div>
 
-                    <div class="flex items-center justify-between space-x-4">
-                        <button type="button" @onclick="Accept"
+                    @if (option != MapSelectionOption.None)
+                    {
+                        <div class="flex items-center justify-between space-x-4">
+                            <button type="button" @onclick="Accept"
                             class="@Styles.PrimaryButton">
 
-                            <svg xmlns="http://www.w3.org/2000/svg" class="@Styles.DefaultIcon" viewBox="0 0 24 24" stroke-width="3" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                                <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                                <path d="M5 12l5 5l10 -10" />
-                            </svg>
+                                <svg xmlns="http://www.w3.org/2000/svg" class="@Styles.DefaultIcon" viewBox="0 0 24 24" stroke-width="3" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                    <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                                    <path d="M5 12l5 5l10 -10" />
+                                </svg>
 
-                            <span class="ml-2"> OK </span>
+                                <span class="ml-2"> OK </span>
 
-                        </button>
+                            </button>
 
-                        <button type="button" @onclick="Close"
+                            <button type="button" @onclick="Close"
                             class="@Styles.SecondaryButton">
 
-                            <span class="ml-2"> Cancel </span>
+                                <span class="ml-2"> Cancel </span>
 
-                        </button>
-                    </div>
-
-
-
-                    <div class="hidden mt-4 text-sm text-lola-red">
-                        <p>
-                            ¡Vaya! El pedido no se ha podido procesar.
-                        </p>
-                        <p class="mt-2">
-                            Intentalo de nuevo en unos minutos o contacta directamente con <a class="text-lola-green font-medium" href="mailto:loladesayuna@gmail.com">
-                                loladesayuna@gmail.com
-                            </a>
-                        </p>
-                    </div>
+                            </button>
+                        </div>
+                    }
                 }
 
                 <FightIcon />
@@ -112,10 +102,13 @@
     private MapSelectionOption option = MapSelectionOption.None;
     private string header = "Map";
 
-    private ProvinceClickedArgs? selectedProvince = null;
+    private ProvinceClickedArgs? selectedProvinceArgs = null;
 
     [CascadingParameter]
     public Game Game { get; set; } = null!;
+
+    [Parameter]
+    public EventCallback<ProvinceChoosenArgs> OnProvinceAccepted { get; set; }
 
     private void Toggle(bool value)
     {
@@ -131,45 +124,37 @@
 
     private void Close()
     {
-        if (option != MapSelectionOption.None)
+        if (option == MapSelectionOption.None)
         {
             show = false;
             StateHasChanged();
         }
     }
 
-    public enum MapSelectionOption
+    private async Task Accept()
     {
-        None,
-        ChooseCondottiere,
-        ChoosePope
-    }
-
-    int i = 1;
-    private void Accept()
-    {
-        if (selectedProvince is null)
+        if (selectedProvinceArgs is null)
         {
             return;
         }
 
-        if (option == MapSelectionOption.ChooseCondottiere)
+        var provinceChoosenArgs = new ProvinceChoosenArgs(selectedProvinceArgs, option);
+        if (option == MapSelectionOption.ChooseCondottiero)
         {
-            Game.Map.PlaceCondottiero(selectedProvince.Province.Id, selectedProvince.Position);
+            Game.Map.PlaceCondottiero(selectedProvinceArgs.Province.Id);
             return;
         }
 
         if (option == MapSelectionOption.ChoosePope)
         {
-            Game.Map.PlacePope(selectedProvince.Province.Id, selectedProvince.Position);
+            Game.Map.PlacePope(selectedProvinceArgs.Province.Id);
         }
-
-        //Game.Map.TakeControl(i++, Game.Turn.CurrentPlayer);
+        
+        await OnProvinceAccepted.InvokeAsync(provinceChoosenArgs);
     }
 
     private void ProvinceClicked(ProvinceClickedArgs args)
     {
-
-        selectedProvince = args;
+        selectedProvinceArgs = args;
     }
 }

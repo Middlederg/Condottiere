@@ -5,7 +5,13 @@
 <CascadingValue Value="gameContext">
     <CascadingValue Value="game">
 
-        <Header />
+        <Header>
+            <button class="@linkClass" @onclick="() => map?.Open()">
+                <MapIcon />
+            </button>
+        </Header>
+
+        <SlideOverMap @ref="map" OnProvinceAccepted="ProvinceChosen" />
 
         <div class="max-w-3xl mx-auto p-4 md:p-8">
 
@@ -27,27 +33,77 @@
                         <PlayerStatus Player="@game.Turn.MainPlayer" />
                     </div>
                 </div>
+                
+                @if (game.Turn.IsGameEnd(gameContext))
+                {
+                    <span>
+                        End of game
+                    </span>
 
-                <div class="flex items-center justify-between space-x-4 mt-8">
-                    @if (!autoplaying)
+                    <div class="flex items-center justify-between space-x-4 mt-8">
+                        <button type="button" @onclick="Exit" class="@Styles.PrimaryButton">
+                            <span class="ml-2"> Exit </span>
+                        </button>
+                    </div>
+                }
+                else
+                {
+                    if (game.Turn.IsEndOfBattle())
                     {
-                        <button type="button" @onclick="ChooseCard"
+                        @if(game.Turn.IsEndOfRound())
+                        {
+                            @*Show cards to discard for player-1*@
+                
+                            <div class="flex items-center justify-between space-x-4 mt-8">
+                                <button type="button" @onclick="GoToNextBattle" class="@Styles.PrimaryButton">
+
+                                    <span class="ml-2"> New Round </span>
+
+                                </button>
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="flex items-center justify-between space-x-4 mt-8">
+                                <button type="button" @onclick="GoToNextBattle" class="@Styles.PrimaryButton">
+
+                                    <span class="ml-2"> Next battle </span>
+
+                                </button>
+                            </div>
+                        }
+                    }
+                    else
+                    {
+                        if (autoplaying)
+                        {
+                            <span class="text-center text-red-500 text-sm">
+                                @game.Turn.CurrentPlayer.Name is playing...
+                            </span>
+                        }
+                        else
+                        {
+                            <div class="flex items-center justify-between space-x-4 mt-8">
+                                <button type="button" @onclick="ChooseCard"
                         class="@Styles.PrimaryButton">
 
-                            <span class="ml-2"> PLAY </span>
+                                    <span class="ml-2"> PLAY </span>
 
-                        </button>
+                                </button>
 
-                        <button type="button" @onclick="Pass"
+                                <button type="button" @onclick="Pass"
                         class="@Styles.SecondaryButton">
 
-                            <span class="ml-2"> PASS </span>
+                                    <span class="ml-2"> PASS </span>
 
-                        </button>
+                                </button>
+                            </div>
+                        }
                     }
-                </div>
+                }
 
-                <SlideOverBottom @ref="cardPanel" Header="Select a card to play" OnAccepted="Play">
+
+                <SlideOverBottom @ref="cardPanel" Header="Select a card to play" OnAccepted="PlayCard">
                     <div class="grid grid-cols-4 md:grid-cols-5 gap-4">
 
                         @foreach (var card in game.Turn.MainPlayer.Hand)
@@ -64,18 +120,70 @@
 
 @code {
     private SlideOverBottom? cardPanel;
+    private SlideOverMap? map;
 
-    private GameContext gameContext = new GameContext(6, withSieges: false, new SpringOptions(), new BishopOptions());
+    private string linkClass = $"flex px-4 py-2 text-sm space-x-2 items-center font-semibold rounded-lg outline-none focus:outline-none hover:bg-{Styles.MainColor}-50 hover:text-{Styles.MainColor}-900";
+    //private string linkClassMobile = $"flex items-center justify-center space-x-2 max-w-xs w-full px-4 py-2 text-sm uppercase font-semibold rounded-lg outline-none focus:outline-none hover:bg-{Styles.MainColor}-50 hover:text-{Styles.MainColor}-900";
+    private string activeClass = $"text-{Styles.MainColor}-900 bg-white";
+
+    private GameContext gameContext = new GameContext(3, withSieges: false, new SpringOptions(), new BishopOptions());
     private Game? game;
 
     private Card? selectedCard;
 
     private bool autoplaying = false;
 
-    protected async override Task OnInitializedAsync()
+    protected override async Task OnAfterRenderAsync(bool firstRender)
     {
-        game = new Game(gameContext);
-        game.PrepareNextBattle(1);
+        if (firstRender)
+        {
+            game = new Game(gameContext);
+            await ChooseCondottiero(isNewRound: true);
+        }
+    }
+
+    private async Task ChooseCondottiero(bool isNewRound)
+    {
+        if (game is null)
+        {
+            return;
+        }
+
+        //Are there any free provinces?
+
+        if (game.Turn.IsMainPlayerTurn)
+        {
+            map?.Open(MapSelectionOption.ChooseCondottiero);
+        }
+        else
+        {
+            Player chooser = game.Turn.NextBattleChooser(gameContext);
+            int? provinceId = game.Map.GetMostSuitable(chooser.OwnedProvinces);
+            if (provinceId.HasValue)
+            {
+                game.PrepareNextBattle(provinceId.Value, isNewRound);
+                await AutoPlay();
+            }
+        }
+    }
+
+    private async Task ProvinceChosen(ProvinceChoosenArgs args)
+    {
+        if (game is null)
+        {
+            return;
+        }
+        
+        if (args.Option == MapSelectionOption.ChooseCondottiero)
+        {
+            game.PrepareNextBattle(args.Province.Id, isNewRound: false);
+        }
+
+        if (args.Option == MapSelectionOption.ChoosePope)
+        {
+            game.PlayBishop();
+        }
+
         await AutoPlay();
     }
 
@@ -84,7 +192,7 @@
         cardPanel?.Open();
     }
 
-    private async Task Play()
+    private async Task PlayCard()
     {
         if (selectedCard is not null && game is not null)
         {
@@ -140,6 +248,7 @@
         }
 
         autoplaying = false;
+        StateHasChanged();
     }
 
     private void EndOfBattle()
@@ -157,10 +266,25 @@
             if (battleProvince is not null)
             {
                 game.Map.TakeControl(battleProvince, winner);
-                //game.PrepareNextBattle(1);
                 StateHasChanged();
             }
         }
+    }
 
+    private async Task GoToNextBattle()
+    {
+        await ChooseCondottiero(isNewRound: false);
+        StateHasChanged();
+    }
+
+    private async Task GoToNextRound()
+    {
+        await ChooseCondottiero(isNewRound: true);
+        StateHasChanged();
+    }
+
+    private async Task Exit()
+    {
+        
     }
 }

@@ -14,6 +14,8 @@ public record VictoryOptions(int Provinces, int NearProvinces);
 
 public class GameContext
 {
+    public const int InitialHand = 10;
+
     public int PlayerCount { get; }
     public bool WithSieges { get; }
     public SpringOptions SpringOptions { get; }

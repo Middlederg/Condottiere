@@ -22,11 +22,9 @@
                     </span>
 
                 </NavLink>*@
+
+                @ChildContent
                 
-                <button class="@linkClass"
-                        @onclick="() => map.Open(option: SlideOverMap.MapSelectionOption.ChoosePope)">
-                    <MapIcon />
-                </button>
             </nav>
         </div>
         
@@ -43,27 +41,20 @@
 
                 </NavLink>*@
 
-                <NavLink class=@linkClassMobile
-                         href="missions" ActiveClass=@activeClass>
-
-                    <MapIcon />
-
-                </NavLink>
+                     @ChildContent
             </nav>
         </div>
     </div>
 
-    <SlideOverMap @ref="map" />
+
     
 </header>
 
 @code {
-    private string linkClass = $"flex px-4 py-2 text-sm space-x-2 items-center font-semibold rounded-lg outline-none focus:outline-none hover:bg-{Styles.MainColor}-50 hover:text-{Styles.MainColor}-900";
-    private string linkClassMobile = $"flex items-center justify-center space-x-2 max-w-xs w-full px-4 py-2 text-sm uppercase font-semibold rounded-lg outline-none focus:outline-none hover:bg-{Styles.MainColor}-50 hover:text-{Styles.MainColor}-900";
-    private string activeClass = $"text-{Styles.MainColor}-900 bg-white";
     private bool showMenu = false;
-
-    private SlideOverMap? map;
+    
+    [Parameter]
+    public RenderFragment? ChildContent { get; set; }
 
     private void ToggleMenu()
     {

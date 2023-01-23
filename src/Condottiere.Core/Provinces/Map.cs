@@ -18,22 +18,24 @@ public class Map
         return province;
     }
 
+    public IEnumerable<Province> GetFreeProvinces() => Provinces.Where(x => !x.HasPope && !x.HasCondottiero);
+
     public Province? GetPopeProvince()
     {
         Province? province = Provinces.SingleOrDefault(x => x.HasPope);
         return province;
     }
 
-    public void PlaceCondottiero(int provinceId, MapPosition position)
+    public void PlaceCondottiero(int provinceId)
     {
         Province province = SearchProvince(provinceId);
-        province.PlaceCondottiero(position);
+        province.PlaceCondottiero(province.Position);
     }
 
-    public void PlacePope(int provinceId, MapPosition position)
+    public void PlacePope(int provinceId)
     {
         Province province = SearchProvince(provinceId);
-        province.PlacePope(position);
+        province.PlacePope(province.Position);
     }
 
     public void TakeControl(Province province, Player player)
@@ -72,6 +74,27 @@ public class Map
     public Province Ancona => Get(15);
     public Province Roma => Get(16);
     public Province Napoli => Get(17);
+
+    public int? GetMostSuitable(IEnumerable<PlayerProvince> provinces)
+    {
+        IEnumerable<int> candidateIds = provinces
+            .SelectMany(x => x.Borders)
+            .GroupBy(x => x)
+            .OrderByDescending(x => x.Count())
+            .Select(x => x.Key);
+
+        List<int> avaliableProvinceIds = GetFreeProvinces().Select(x => x.Id).ToList();
+
+        foreach (int candidateId in candidateIds)
+        {
+            if (avaliableProvinceIds.Contains(candidateId))
+            {
+                return candidateId;
+            }
+        }
+
+        return avaliableProvinceIds.GetRandomItem();
+    }
 }
 
 public record MapPosition(double X, double Y);

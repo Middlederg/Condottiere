@@ -1,6 +1,4 @@
-﻿@using static Condottiere.Web.Pages.SlideOverMap;
-
-<div class="border-2 rounded border-gray-900 p-1">
+﻿<div class="border-2 rounded border-gray-900 p-1">
 
     @if (Map is not null)
     {
@@ -584,7 +582,7 @@
 
             @if(selectedProvince is not null && Option != MapSelectionOption.None)
             {
-                @if(Option == MapSelectionOption.ChooseCondottiere)
+                @if(Option == MapSelectionOption.ChooseCondottiero)
                 {
                     <CondottiereToken Position="@selectedProvince.Position" />
                 }

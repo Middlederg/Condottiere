@@ -21,9 +21,15 @@ public class Game
         Map = new Map();
     }
 
-    public void PrepareNextBattle(int provinceId)
+    public void PrepareNextBattle(int provinceId, bool isNewRound)
     {
-        Turn.PrepareNextBattle(Deck, provinceId);
+        Turn.PrepareNextBattle(Deck, isNewRound, provinceId);
+        Map.PlaceCondottiero(provinceId);
+    }
+
+    public void PlayBishop()
+    {
+        
     }
 
     public void AutoPlay(GameContext context)

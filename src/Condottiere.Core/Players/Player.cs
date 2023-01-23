@@ -30,11 +30,15 @@ public class Player : Entity<int>
         OwnedProvinces = new List<PlayerProvince>();
     }
 
-    public void ResetBattleLines(IEnumerable<Card> newCards, bool isDefending)
+    public void ResetBattleLines(bool isDefending)
     {
-        Hand = newCards.ToList();
         status = new Status(isDefending);
         Army = new List<Card>();
+    }
+
+    public void NewRound(IEnumerable<Card> newCards)
+    {
+        Hand = newCards.ToList();
     }
 
     //public bool HasPassed => status?.HasPassed ?? false;
@@ -120,7 +124,7 @@ public class Player : Entity<int>
         return lista.Any(x => x.Value >= 1) ? 1 : 0;
     }
 
-    public int CardsToDraw => 10 + OwnedProvinces.Count - Hand.Count;
+    public int CardsToDraw => GameContext.InitialHand + OwnedProvinces.Count - Hand.Count;
 
     public override string ToString() => Name;
 

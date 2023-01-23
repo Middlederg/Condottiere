@@ -35,7 +35,7 @@ public class Deck
         cards = cards.Concat(suffledDiscardPile).ToList();
     }
 
-    public void Discard(IEnumerable<Card> cardsToDiscard)
+    public void ToDiscard(IEnumerable<Card> cardsToDiscard)
     {
         discardPile = discardPile.Concat(cardsToDiscard).ToList();
     }

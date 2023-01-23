@@ -25,7 +25,7 @@ public class TurnContext
         }
         
         Players = players.ToList();
-        currentPlayerIndex = 0;
+        currentPlayerIndex = Enumerable.Range(0, players.Count()).GetRandomItem();
         Index = 0;
     }
 
@@ -125,7 +125,7 @@ public class TurnContext
 
     public bool IsEndOfRound() => Players.Count(x => x.Hand.Count > 0) <= 1;
 
-    public void PrepareNextBattle(Deck deck, int nextBattleProvince)
+    public void PrepareNextBattle(Deck deck, bool isNewRound, int nextBattleProvince)
     {
         Player? owner = Players.FirstOrDefault(x => x.Owns(nextBattleProvince));
         
@@ -141,8 +141,13 @@ public class TurnContext
             IEnumerable<Card> newCards = Enumerable.Range(0, player.CardsToDraw).Select(x => deck.Draw());
 
             bool isDefending = owner is not null && owner.Id == player.Id;
-            deck.Discard(player.Army);
-            player.ResetBattleLines(newCards, isDefending);
+            player.ResetBattleLines(isDefending);
+
+            if (isNewRound)
+            {
+                deck.ToDiscard(player.Army);
+                player.NewRound(newCards);
+            }
         }
     } 
 }
