@@ -96,7 +96,7 @@ public class TurnContext
             return Players.First(x => x.Id == BattleWinner(gameContext)!.Id);
         }
 
-        return Players[NextPlayerIndex];
+        return Players[currentPlayerIndex];
     }
 
 
@@ -137,14 +137,13 @@ public class TurnContext
             {
                 deck.IncorporateDiscardPile();
             }
-            
-            IEnumerable<Card> newCards = Enumerable.Range(0, player.CardsToDraw).Select(x => deck.Draw());
 
             bool isDefending = owner is not null && owner.Id == player.Id;
             player.ResetBattleLines(isDefending);
 
             if (isNewRound)
             {
+                IEnumerable<Card> newCards = Enumerable.Range(0, player.CardsToDraw).Select(x => deck.Draw());
                 deck.ToDiscard(player.Army);
                 player.NewRound(newCards);
             }

@@ -63,6 +63,9 @@ public class Province : Entity<int>
         CondottieroPosition = position;
     }
 
+    public void RemoveCondottiero() => CondottieroPosition = null;
+    public void RemovePope() => PopePosition = null;
+
     public bool IsForbidden(GameContext gameContext)
     {
         if (HasPope || HasCondottiero)

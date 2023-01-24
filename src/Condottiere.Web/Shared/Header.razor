@@ -2,10 +2,9 @@
     <div class="w-full max-w-3xl flex flex-col">
         <div class="flex flex-row items-center justify-between py-2 md:py-3 px-4 md:px-8">
             <div class="flex flex-row items-center justify-between">
-                <NavLink class="text-lg font-semibold tracking-widest text-white hover:text-red-100 uppercase rounded-lg focus:outline-none focus:shadow-outline"
-                         href="" Match="NavLinkMatch.All">
-                    Condottiere
-                </NavLink>
+                <span class="text-lg font-semibold tracking-widest text-white hover:text-red-100 uppercase rounded-lg">
+                    @HeaderContent
+                </span>
             </div>
             <div class="sm:hidden flex items-center">
                 <button class="p-1 border-2 rounded" @onclick="ToggleMenu">
@@ -23,7 +22,7 @@
 
                 </NavLink>*@
 
-                @ChildContent
+                @Navigation
                 
             </nav>
         </div>
@@ -41,7 +40,7 @@
 
                 </NavLink>*@
 
-                     @ChildContent
+                @Navigation
             </nav>
         </div>
     </div>
@@ -54,7 +53,10 @@
     private bool showMenu = false;
     
     [Parameter]
-    public RenderFragment? ChildContent { get; set; }
+    public RenderFragment? HeaderContent { get; set; }
+    
+    [Parameter]
+    public RenderFragment? Navigation { get; set; }
 
     private void ToggleMenu()
     {

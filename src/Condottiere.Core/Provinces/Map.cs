@@ -28,12 +28,18 @@ public class Map
 
     public void PlaceCondottiero(int provinceId)
     {
+        Province? previousProvince = GetBattleProvince();
+        previousProvince?.RemoveCondottiero();
+
         Province province = SearchProvince(provinceId);
         province.PlaceCondottiero(province.Position);
     }
 
     public void PlacePope(int provinceId)
     {
+        Province? previousProvince = GetPopeProvince();
+        previousProvince?.RemovePope();
+
         Province province = SearchProvince(provinceId);
         province.PlacePope(province.Position);
     }

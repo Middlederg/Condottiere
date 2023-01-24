@@ -30,44 +30,9 @@
             <div class="border-t border-gray-200 py-6 px-4 sm:px-6">
                 @if (Game is not null)
                 {
-                    <div class="flex justify-between text-base font-medium text-gray-900">
-                        @if (Game.Map.GetBattleProvince() is not null)
-                        {
-                            <p>
-                                Fight in @Game.Map.GetBattleProvince()!.Name
-                            </p>
-                        }
-
-                        @if (Game.Map.GetPopeProvince() is not null)
-                        {
-                            <p class="mt-0.5 text-sm text-gray-500">@Game.Map.GetPopeProvince()!.Name</p>
-                        }
-                    </div>
-
-
-                    <div class="flex items-center space-x-4 justify-center mt-2">
-
-                        <ul role="list" class="max-w-sm md:divide-y md:divide-gray-200 dark:divide-gray-700">
-                            @foreach (var (player, position) in Game.Turn.Players.Select((x, index) => (x, index + 1)))
-                            {
-                                <li class="py-1 sm:py-2">
-                                    <div class="flex items-center justify-between">
-                                        <span class="inline-flex items-center bg-green-100 text-green-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded-full dark:bg-green-900 dark:text-green-300">
-                                            <span class="w-2 h-2 mr-1 bg-green-500 rounded-full"></span>
-                                            @player.Name
-                                        </span>
-                                        <p class="text-sm text-gray-500 truncate dark:text-gray-400">
-                                            @player.OwnedProvinces.Count provinces
-                                        </p>
-                                    </div>
-                                </li>
-                            }
-                        </ul>
-                    </div>
-
                     @if (option != MapSelectionOption.None)
                     {
-                        <div class="flex items-center justify-between space-x-4">
+                        <div class="@(selectedProvinceArgs is null ? "hidden" : "") flex items-center justify-between space-x-4">
                             <button type="button" @onclick="Accept"
                             class="@Styles.PrimaryButton">
 
@@ -79,19 +44,9 @@
                                 <span class="ml-2"> OK </span>
 
                             </button>
-
-                            <button type="button" @onclick="Close"
-                            class="@Styles.SecondaryButton">
-
-                                <span class="ml-2"> Cancel </span>
-
-                            </button>
                         </div>
                     }
                 }
-
-                <FightIcon />
-                <CrossIcon />
             </div>
         </div>
     </div>
@@ -101,6 +56,7 @@
     private bool show = false;
     private MapSelectionOption option = MapSelectionOption.None;
     private string header = "Map";
+    private int? forbiddenProvinceId;
 
     private ProvinceClickedArgs? selectedProvinceArgs = null;
 
@@ -116,24 +72,22 @@
         StateHasChanged();
     }
 
-    public void Open(MapSelectionOption option = MapSelectionOption.None)
+    public void Open(MapSelectionOption option = MapSelectionOption.None, int? forbiddenProvinceId = null)
     {
         this.option = option;
+        this.forbiddenProvinceId = forbiddenProvinceId;
         Toggle(value: true);
     }
-
-    private void Close()
+    
+    public void Close()
     {
-        if (option == MapSelectionOption.None)
-        {
-            show = false;
-            StateHasChanged();
-        }
+        show = false;
+        StateHasChanged();
     }
 
     private async Task Accept()
     {
-        if (selectedProvinceArgs is null)
+        if (selectedProvinceArgs is null || (forbiddenProvinceId.HasValue && forbiddenProvinceId == selectedProvinceArgs.Province.Id))
         {
             return;
         }
@@ -142,14 +96,13 @@
         if (option == MapSelectionOption.ChooseCondottiero)
         {
             Game.Map.PlaceCondottiero(selectedProvinceArgs.Province.Id);
-            return;
         }
 
         if (option == MapSelectionOption.ChoosePope)
         {
             Game.Map.PlacePope(selectedProvinceArgs.Province.Id);
         }
-        
+
         await OnProvinceAccepted.InvokeAsync(provinceChoosenArgs);
     }
 
