@@ -16,17 +16,15 @@
             <span class="flex flex-col w-full px-2">
                 @if (InnerCard is IValuableCard valuable)
                 {
-                    <span class="flex items-center justify-between md:p-1">
-                        <span class="text-sm md:text-xl font-mono font-bold">
+                    <span class="flex items-center justify-center md:pt-2">
+                        <span class="text-base md:text-2xl font-mono font-bold">
                             @valuable.Value
                         </span>
-                        <span class="text-sm md:text-xl font-mono font-bold">
-                            @valuable.Value
-                        </span>
+                     
                     </span>
                 }
 
-                <span class="flex-1 flex justify-center items-center md:mb-4">
+                <span class="flex-1 flex justify-center items-center md:mb-2 md:px-2">
                     <CardIconRenderer Card="InnerCard" />
                 </span>
             </span>

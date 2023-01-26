@@ -13,7 +13,7 @@ public class CardIconRenderer : ComponentBase
     public Card? Card { get; set; }
 
     [Parameter]
-    public string Style { get; set; } = "w-8 w-8 md:w-12 md:h-12";
+    public string Style { get; set; } = ""; // = "w-8 w-8 md:w-12 md:h-12";
 
     private static int index = 0;
 
@@ -41,10 +41,7 @@ public class CardIconRenderer : ComponentBase
     private bool RenderIcon<T>(RenderTreeBuilder builder, bool isStrong = false) where T : IComponent
     {
         builder.OpenComponent<T>(index++);
-        if (Style is not null)
-        {
-            builder.AddAttribute(index++, "Style", Style);
-        }
+        builder.AddAttribute(index++, "Style", Style);
 
         if (isStrong)
         {
