@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.Collections;
 using Condottiere.Core.Cards;
 using Condottiere.Core.Provinces;
+using System.Runtime.CompilerServices;
 
 namespace Condottiere.Core.Players;
 
@@ -99,18 +100,67 @@ public class Player : Entity<int>
 
         IEnumerable<int> allBorders = OwnedProvinces.SelectMany(x => x.Borders);
 
-        var frontiers = new List<int>();
+        List<Coincidence> coincidenceList = new();
         
         foreach (PlayerProvince province in OwnedProvinces)
         {
-            bool isFrontier = allBorders.Contains(province.Id);
-            if (isFrontier)
+            IEnumerable<Coincidence> coincidences = OwnedProvinces.Where(x => x.Borders.Contains(province.Id)).Select(x => new Coincidence(x.Id, province.Id));
+            if (coincidences.Any())
             {
-                frontiers.Add(province.Id);
+                coincidenceList.AddRange(coincidences);
             }
         }
 
-        return frontiers.Distinct() + 1;
+        IEnumerable<Coincidence> distinctCoincidences = coincidenceList.Distinct(new CoincidenceComparer());
+        return distinctCoincidences.Count() + 1;
+
+    }
+    private class Coincidence
+    {
+        public List<int> ProvinceIds { get; }
+
+        public Coincidence(params int[] provinceIds)
+        {
+            this.ProvinceIds = provinceIds.OrderBy(x => x).ToList();
+        }
+
+        //public override bool Equals(object? obj)
+        //{
+        //    if (obj == null || GetType() != obj.GetType())
+        //    {
+        //        return false;
+        //    }
+
+        //    return Enumerable.SequenceEqual(((Coincidence)obj).ProvinceIds, ProvinceIds);
+        //}
+
+        //public bool Equals(Coincidence? other)
+        //{
+        //    return Enumerable.SequenceEqual(other.ProvinceIds, ProvinceIds);
+        //}
+
+        //public override int GetHashCode() => ProvinceIds.GetHashCode();
+    }
+
+    class CoincidenceComparer : IEqualityComparer<Coincidence>
+    {
+        public bool Equals(Coincidence? x, Coincidence? y)
+        {
+            if (ReferenceEquals(x, y)) return true;
+
+            if (x is null || y is null)
+                return false;
+
+            return x.ProvinceIds.SequenceEqual(y.ProvinceIds);
+        }
+
+        public int GetHashCode(Coincidence product)
+        {
+            //Check whether the object is null
+            if (product is null) return 0;
+
+            return product.ProvinceIds.Count.GetHashCode();
+        }
     }
 
     public int CardsToDraw => GameContext.InitialHand + OwnedProvinces.Count - Hand.Count;

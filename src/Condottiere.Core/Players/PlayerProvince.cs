@@ -14,4 +14,6 @@ public record PlayerProvince
         Name = province.Name;
         Borders = province.Borders;
     }
+
+    public override string ToString() => $"{Id} - {Name}";
 }

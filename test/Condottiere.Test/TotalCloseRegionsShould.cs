@@ -44,7 +44,7 @@ public class TotalCloseRegionsShould
         Player player = NewPlayer();
         player.TakeControl(map.Milano);
         player.TakeControl(map.Firenze);
-        player.TakeControl(map.Spoleto);
+        player.TakeControl(map.Napoli);
         player.TotalCloseRegions().Should().Be(1);
     }
 
