@@ -16,11 +16,11 @@ public class Player : Entity<int>
     public List<Card> Army { get; private set; }
     public List<PlayerProvince> OwnedProvinces { get; private set; }
     public Color Color { get; }
-    public Difficulty Profile { get; }
+    public Profile Profile { get; }
 
     public Status? status;
 
-    public Player(int id, string name, Color color, Difficulty profile) : base(id)
+    public Player(int id, string name, Color color, Profile profile) : base(id)
     {
         Name = name;
         Color = color;
@@ -92,36 +92,25 @@ public class Player : Entity<int>
 
     public int TotalCloseRegions()
     {
-        List<KeyValuePair<int, int>> lista = new List<KeyValuePair<int, int>>();
-
-        foreach (PlayerProvince prov in OwnedProvinces)
+        if (OwnedProvinces.Count == 0 || OwnedProvinces.Count == 1)
         {
-            //Resto de provincias
-            var posiblesAdyacentes = OwnedProvinces.Where(x => !x.Equals(prov)).Select(x => x.Id);
-
-            //Añade ocurrencia con id de provincia y numero de adyacentes
-            lista.Add(new KeyValuePair<int, int>(prov.Id, prov.Borders.Intersect(posiblesAdyacentes).Count()));
+            return OwnedProvinces.Count;
         }
 
-        //Si cualquier región tiene 3 o más coincidencias, ya hay 4 regiones adyacentes
-        if (lista.Any(x => x.Value >= 3))
-            return 4;
+        IEnumerable<int> allBorders = OwnedProvinces.SelectMany(x => x.Borders);
 
-        //Si cualquier región tiene 2 o más coincidencias, y entre esas regiones son coincidentes, hay 3 regiones unidas por lo menos
-        if (lista.Any(x => x.Value >= 2))
+        var frontiers = new List<int>();
+        
+        foreach (PlayerProvince province in OwnedProvinces)
         {
-            foreach (var item in lista.Where(x => x.Value >= 2))
+            bool isFrontier = allBorders.Contains(province.Id);
+            if (isFrontier)
             {
-                var p = OwnedProvinces.Find(x => x.Id == item.Key); //seleciona la provincia
-
-                var ids = lista.Where(x => x.Key != p.Id).Select(x => x.Key); //coge el resto de ids de provincia
-                var posiblesAdyacentes = OwnedProvinces.Where(x => ids.Contains(x.Id)).SelectMany(x => x.Borders);
-                if (p.Borders.Intersect(posiblesAdyacentes).Any())
-                    return 3;
+                frontiers.Add(province.Id);
             }
-            return 2;
         }
-        return lista.Any(x => x.Value >= 1) ? 1 : 0;
+
+        return frontiers.Distinct() + 1;
     }
 
     public int CardsToDraw => GameContext.InitialHand + OwnedProvinces.Count - Hand.Count;

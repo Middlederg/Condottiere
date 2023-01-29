@@ -6,47 +6,11 @@
                     @HeaderContent
                 </span>
             </div>
-            <div class="sm:hidden flex items-center">
-                <button class="p-1 border-2 rounded" @onclick="ToggleMenu">
-                    <MenuIcon />
-                </button>
-            </div>
-            <nav class="hidden sm:flex justify-end items-center flex-row space-x-2">
-                @*<NavLink class="@linkClass"
-                         href="prepareGame" ActiveClass=@activeClass>
-
-                    <HomeIcon />
-                    <span>
-                        Home
-                    </span>
-
-                </NavLink>*@
-
-                @Navigation
-                
-            </nav>
-        </div>
-        
-        @* MOBILE MENU *@
-        <div class="@(showMenu ? "" : "hidden")">
-            <nav class="flex sm:hidden flex-col space-y-2 justify-end items-center flex-row mx-auto py-2">
-               @* <NavLink class=@linkClassMobile
-                         href="prepareGame" ActiveClass=@activeClass>
-
-                    <HomeIcon />
-                    <span>
-                        Home
-                    </span>
-
-                </NavLink>*@
-
+            <nav class="flex justify-end items-center flex-row space-x-2">
                 @Navigation
             </nav>
         </div>
     </div>
-
-
-    
 </header>
 
 @code {

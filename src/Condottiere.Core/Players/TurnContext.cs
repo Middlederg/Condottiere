@@ -9,8 +9,8 @@ public class TurnContext
     public int Index { get; private set; }
 
     public List<Player> Players { get; }
-    public IEnumerable<Player> Opponents => Players.Where(x => x.Profile != Difficulty.Human);
-    public Player MainPlayer => Players.First(x => x.Profile == Difficulty.Human);
+    public IEnumerable<Player> Opponents => Players.Where(x => x.Profile != Profile.Human);
+    public Player MainPlayer => Players.First(x => x.Profile == Profile.Human);
     public bool IsMainPlayerTurn => CurrentPlayer == MainPlayer;
 
     private int currentPlayerIndex;
@@ -19,7 +19,7 @@ public class TurnContext
 
     public TurnContext(IEnumerable<Player> players)
     {
-        if (players.Count(x => x.Profile == Difficulty.Human) != 1)
+        if (players.Count(x => x.Profile == Profile.Human) != 1)
         {
             throw new ArgumentException("There must be exactly one human player");
         }

@@ -14,8 +14,8 @@ public class Game
     {
         IEnumerable<string> playerNames = NameCreator.Create(gameContext.PlayerCount - 1);
         Color[] colors = Enum.GetValues<Color>();
-        List<Player> players = playerNames.Select((name, index) => new Player(index, name, colors.ElementAt(index), Difficulty.Normal)).ToList();
-        players.Add(new Player(gameContext.PlayerCount - 1, playerName, colors.ElementAt(gameContext.PlayerCount - 1), Difficulty.Human));
+        List<Player> players = playerNames.Select((name, index) => new Player(index, name, colors.ElementAt(index), Profile.Normal)).ToList();
+        players.Add(new Player(gameContext.PlayerCount - 1, playerName, colors.ElementAt(gameContext.PlayerCount - 1), Profile.Human));
         Turn = new TurnContext(players);
         Deck = new Deck(gameContext);
         Map = new Map();
@@ -34,7 +34,7 @@ public class Game
 
     public void AutoPlay(GameContext context)
     {
-        if (Turn.CurrentPlayer.Profile == Difficulty.Human)
+        if (Turn.CurrentPlayer.Profile == Profile.Human)
         {
             throw new InvalidOperationException("Cannot auto play when it's the human player turn");
         }

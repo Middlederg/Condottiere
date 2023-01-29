@@ -1,6 +1,6 @@
 ﻿namespace Condottiere.Core;
 
-public enum Difficulty
+public enum Profile
 {
     Conservative = 1,
     Normal = 2,

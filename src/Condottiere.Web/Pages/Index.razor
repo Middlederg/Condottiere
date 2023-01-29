@@ -9,14 +9,20 @@
             <HeaderContent>
                 @if (game is not null && game.Map.GetBattleProvince() is not null)
                 {
-                    <span>
-                        Battle in @game.Map.GetBattleProvince()!.Name
+                    <span class="flex items-center space-x-2">
+                        <FightIcon Style="w-6 h-6" />
+                        <span class="hidden md:inline">
+                            Battle in @game.Map.GetBattleProvince()!.Name
+                        </span>
+                        <span class="inline md:hidden">
+                            @game.Map.GetBattleProvince()!.Name
+                        </span>
                     </span>
                 }
             </HeaderContent>
             <Navigation>
                 <button class="@linkClass" @onclick="() => map?.Open()">
-                    <MapIcon />
+                    <MapIcon Style="w-6 h-6" />
                 </button>
             </Navigation>
         </Header>
@@ -34,7 +40,6 @@
                         <PlayerStatus Player="player" />
                     }
                 </div>
-
 
                 <div class="flex flex-col space-y-4 mt-8">
 
@@ -151,8 +156,7 @@
     private SlideOverBottom? cardPanel;
     private SlideOverMap? map;
 
-    private string linkClass = $"flex px-4 py-2 text-sm space-x-2 items-center font-semibold rounded-lg outline-none focus:outline-none hover:bg-{Styles.MainColor}-50 hover:text-{Styles.MainColor}-900";
-    //private string linkClassMobile = $"flex items-center justify-center space-x-2 max-w-xs w-full px-4 py-2 text-sm uppercase font-semibold rounded-lg outline-none focus:outline-none hover:bg-{Styles.MainColor}-50 hover:text-{Styles.MainColor}-900";
+    private string linkClass = $"flex p-3 text-sm space-x-2 items-center font-semibold rounded-full outline-none focus:outline-none hover:bg-{Styles.MainColor}-50 hover:text-{Styles.MainColor}-900";
     private string activeClass = $"text-{Styles.MainColor}-900 bg-white";
 
     private GameContext gameContext = new GameContext(3, withSieges: false, new SpringOptions(), new BishopOptions());
@@ -183,7 +187,7 @@
         //Are there any free provinces?
         Player chooser = game.Turn.MainPlayer; // game.Turn.NextBattleChooser(gameContext);
 
-        if (chooser.Profile == Difficulty.Human)
+        if (chooser.Profile == DiProfileuman)
         {
             map?.Open(MapSelectionOption.ChooseCondottiero, game.Map.GetBattleProvince()?.Id);
         }
