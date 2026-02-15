@@ -187,7 +187,7 @@
         //Are there any free provinces?
         Player chooser = game.Turn.MainPlayer; // game.Turn.NextBattleChooser(gameContext);
 
-        if (chooser.Profile == DiProfileuman)
+        if (chooser.Profile == Profile.Human)
         {
             map?.Open(MapSelectionOption.ChooseCondottiero, game.Map.GetBattleProvince()?.Id);
         }

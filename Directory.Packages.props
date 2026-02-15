@@ -41,8 +41,8 @@
   </ItemGroup>
   <ItemGroup Label="Web">
     <PackageVersion Include="Blazored.LocalStorage" Version="4.2.0" />
-    <PackageVersion Include="Microsoft.AspNetCore.Components.WebAssembly" Version="$(AspNetCorePackageVersion)" />
-    <PackageVersion Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="$(AspNetCorePackageVersion)" />
+    <PackageVersion Include="Microsoft.AspNetCore.Components.WebAssembly" Version="10.0.3" />
+    <PackageVersion Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="10.0.3" />
     <PackageVersion Include="Microsoft.AspNetCore.Components.WebAssembly.Server" Version="$(AspNetCorePackageVersion)" />
     <PackageVersion Include="Microsoft.Extensions.Http" Version="7.0.0" />
     <PackageVersion Include="System.Net.Http.Json" Version="7.0.0" />
@@ -50,12 +50,12 @@
   </ItemGroup>
   <ItemGroup Label="Testing">
     <PackageVersion Include="Acheve.TestHost" Version="3.4.0" />
-    <PackageVersion Include="coverlet.collector" Version="3.2.0" />
-    <PackageVersion Include="FluentAssertions" Version="6.8.0" />
-    <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="17.4.1" />
-    <PackageVersion Include="xunit" Version="2.4.2" />
-    <PackageVersion Include="xunit.runner.visualstudio" Version="2.4.5" />
-    <PackageVersion Include="NSubstitute" Version="4.4.0" />
-    <PackageVersion Include="Bogus" Version="34.0.2" />
+    <PackageVersion Include="coverlet.collector" Version="8.0.0" />
+    <PackageVersion Include="FluentAssertions" Version="8.8.0" />
+    <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="18.0.1" />
+    <PackageVersion Include="xunit" Version="2.9.3" />
+    <PackageVersion Include="xunit.runner.visualstudio" Version="3.1.5" />
+    <PackageVersion Include="NSubstitute" Version="5.3.0" />
+    <PackageVersion Include="Bogus" Version="35.6.5" />
   </ItemGroup>
 </Project>

@@ -1,7 +1,7 @@
 <Project>
   <PropertyGroup>
-    <NetTargetVersion>net7.0</NetTargetVersion>
+    <NetTargetVersion>net10.0</NetTargetVersion>
     <NetStandardVersion>netstandard2.0</NetStandardVersion>
-    <AspNetCorePackageVersion>7.0.1</AspNetCorePackageVersion>
+    <AspNetCorePackageVersion>10.0.2</AspNetCorePackageVersion>
   </PropertyGroup>
 </Project>
